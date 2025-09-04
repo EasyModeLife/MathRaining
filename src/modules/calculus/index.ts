@@ -1,2 +1,2 @@
-export { calculusEngine } from './logic/engine'
-export { default as CalculusTrainer } from './ui/Trainer'
+export * from './generators/derivatives'
+export * from './verificators/derivatives'

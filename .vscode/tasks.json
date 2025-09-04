@@ -1,0 +1,107 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install and Dev (npm)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm install && npm run build -w 2>/dev/null || npm run build"
+			]
+		},
+		{
+			"label": "Build (npm)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (post-deps)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase3)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase4)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase5)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase6)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			],
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Build (fase7)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase7-2)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase8)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		},
+		{
+			"label": "Build (fase9)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npm run build"
+			]
+		}
+	]
+}

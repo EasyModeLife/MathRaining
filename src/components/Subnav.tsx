@@ -1,33 +1,21 @@
-import { NavLink } from 'react-router-dom';
-import './Subnav.css';
+'use client'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-interface SubnavProps {
-  basePath: string;
-}
-
-const Subnav = ({ basePath }: SubnavProps) => {
-  const links = [
-    { path: 'game', label: 'Game' },
-    { path: 'practice', label: 'Practice' },
-    { path: 'learning', label: 'Learning' },
-    { path: 'howto', label: 'How To' },
-  ];
-
+export function Subnav({ base }: { base: string }) {
+  const pathname = usePathname()
+  const tabs = [
+    { href: `${base}`, label: 'Inicio' },
+    { href: `${base}/games`, label: 'Juegos' },
+    { href: `${base}/practice`, label: 'Práctica' },
+    { href: `${base}/configuration`, label: 'Configuración' },
+    { href: `${base}/profile`, label: 'Perfil' },
+  ]
   return (
-    <nav className="subnav" aria-label="Vistas del módulo">
-      <div className="subnav-links">
-        {links.map(({ path, label }) => (
-          <NavLink
-            key={path}
-            to={`${basePath}/${path}`}
-            className={({ isActive }) => (isActive ? 'active' : '')}
-          >
-            {label}
-          </NavLink>
-        ))}
-      </div>
-    </nav>
-  );
-};
-
-export default Subnav;
+    <div className="flex gap-2 px-4 py-2 border-b border-slate-200 dark:border-slate-700">
+      {tabs.map(t => (
+        <Link key={t.href} href={t.href} className={pathname===t.href ? 'font-semibold underline' : ''}>{t.label}</Link>
+      ))}
+    </div>
+  )
+}

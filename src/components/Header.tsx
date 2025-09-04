@@ -1,62 +1,22 @@
-import { Link, useLocation } from 'react-router-dom';
-import './Header.css';
-import { ThemeSwitcher } from './ThemeSwitcher';
-import { useEffect, useRef, useState } from 'react';
+"use client";
+import Link from "next/link";
+import { Home, Github, Heart, Info, Keyboard, User } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
-const Header = () => {
-  const [open, setOpen] = useState(false);
-  const loc = useLocation();
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  // Cerrar al navegar
-  useEffect(() => {
-    setOpen(false);
-  }, [loc.pathname]);
-
-  // Cerrar con click fuera y tecla Escape
-  useEffect(() => {
-    if (!open) return;
-    const onDocClick = (e: MouseEvent) => {
-      if (!dropdownRef.current) return;
-      if (e.target instanceof Node && dropdownRef.current.contains(e.target)) return;
-      setOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('mousedown', onDocClick);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDocClick);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
-  return (
-    <header className="app-header">
-      <div className="header-content">
-  <Link to="/" className="home-link">MathRaining</Link>
-        <nav className="desktop-nav">
-          <Link to="/stats">Stats</Link>
-          <Link to="/about">About</Link>
-          <a href="https://github.com/EasyModeLife/TheMathGames" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <ThemeSwitcher />
-        </nav>
-        <div className="mobile-menu">
-          <button aria-expanded={open} aria-controls="mobile-actions" aria-haspopup="menu" onClick={() => setOpen(v => !v)} onKeyDown={(e) => {
-            if (e.key === 'Escape') setOpen(false);
-          }}>Menu</button>
-        </div>
-      </div>
-      {open && (
-        <div id="mobile-actions" className="mobile-dropdown" ref={dropdownRef} role="menu">
-          <Link to="/stats" onClick={() => setOpen(false)}>Stats</Link>
-          <Link to="/about" onClick={() => setOpen(false)}>About</Link>
-          <a href="https://github.com/EasyModeLife/TheMathGames" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>GitHub</a>
-          <div style={{ padding: '8px 0' }}><ThemeSwitcher /></div>
-        </div>
-      )}
-    </header>
-  );
-};
-
-export default Header;
+export default function Header() {
+	return (
+		<header className="flex items-center justify-between px-4 py-2 border-b border-slate-200 dark:border-slate-700">
+			<nav className="flex items-center gap-3">
+				<Link href="/" aria-label="Inicio"><Home size={20} /></Link>
+				<Link href={process.env.NEXT_PUBLIC_GITHUB_URL || '#'} aria-label="GitHub"><Github size={20} /></Link>
+				<Link href="/donations" aria-label="Donaciones"><Heart size={20} /></Link>
+				<Link href="/about" aria-label="Sobre el sitio"><Info size={20} /></Link>
+			</nav>
+			<div className="flex items-center gap-3">
+				<button aria-label="Teclado virtual"><Keyboard size={20} /></button>
+				<button aria-label="Perfil"><User size={20} /></button>
+				<ThemeToggle />
+			</div>
+		</header>
+	);
+}
