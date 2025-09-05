@@ -23,6 +23,9 @@ export interface TextCandidate {
   size: number;
 }
 
+// Game type
+export type GameType = 'arithmetic' | 'calculus';
+
 // Game state interface
 export interface GameState {
   level: number;
@@ -33,6 +36,12 @@ export interface GameState {
   isLandscape: boolean;
   screenSize: ScreenSize;
   responsiveSizing: ResponsiveSizingConfig;
+  currentGame: GameType | null;
+  score: number;
+  lives: number;
+  timeLeft: number;
+  isPlaying: boolean;
+  isPaused: boolean;
 }
 
 // Responsive sizing configuration

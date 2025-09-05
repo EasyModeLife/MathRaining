@@ -1,152 +1,34 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { path, navigate } from '../router';
+  import { onMount, onDestroy } from 'svelte';
+  import { path } from '../router';
+  import { createPageRouter } from '../router/pageRouter';
   import { createEventDispatcher } from 'svelte';
-  import GameCard from './GameCard.svelte';
-  import SubNav from './SubNav.svelte';
 
   const dispatch = createEventDispatcher();
 
-  export let currentPath = '/';
+  // Create router instance
+  const router = createPageRouter(path);
 
-  let TrainerComp: any = null;
-  let CalcTrainerComp: any = null;
-  let AboutComp: any = null;
+  // Get reactive stores from router
+  $: currentRoute = $router.getCurrentRoute();
+  $: currentComponent = $router.getCurrentComponent();
 
+  // Handle answer events from games
   function handleAnswer(event: CustomEvent) {
     dispatch('answer', event.detail);
   }
 
-  $: unsubscribe = path.subscribe(async (p) => {
-    currentPath = p;
-    if (import.meta.env?.DEV) console.log('[router] path', p);
-    // Precarga ligera del componente según ruta
-    if (p.startsWith('/arithmetic') && !TrainerComp) {
-      try {
-        const m = await import('../games/arithmetic/Trainer.svelte');
-        TrainerComp = m.default;
-      } catch (e:any) {
-        console.error('[router] failed to load arithmetic trainer', e);
-      }
-    } else if (p.startsWith('/calculus') && !CalcTrainerComp) {
-      try {
-        const m = await import('../games/calculus/Trainer.svelte');
-        CalcTrainerComp = m.default;
-      } catch (e:any) {
-        console.error('[router] failed to load calculus trainer', e);
-      }
-    } else if (p === '/about' && !AboutComp) {
-      try {
-        const m = await import('../About.svelte');
-        AboutComp = m.default;
-      } catch (e) {
-        console.error('[router] failed to load about', e);
-      }
-    }
-  });
-
-  function openArithmetic() { navigate('/arithmetic/game'); }
-  function openCalculus() { navigate('/calculus/game'); }
-
-  onMount(() => {
-    return () => {
-      unsubscribe?.();
-    };
+  // Cleanup on destroy
+  onDestroy(() => {
+    router.destroy();
   });
 </script>
 
 <main class="page-main">
-  {#if currentPath === '/'}
-    <section class="games-grid" aria-label="Available games">
-      <GameCard
-        title="Arithmetic"
-        description="Practice addition, subtraction, multiplication and division with time limits and increasing levels."
-        mathExpr={'\\times\\ \\div\\ +\\ -'}
-        onClick={openArithmetic}
-        ariaLabel="Enter Arithmetic"
-      />
-
-      <GameCard
-        title="Calculus"
-        description="Basic derivatives, integration rules and trigonometric functions with text verification."
-        mathExpr={'\\int \\; \\frac{d}{dx}'}
-        onClick={openCalculus}
-        ariaLabel="Enter Calculus"
-      />
-    </section>
-
-  {:else if currentPath.startsWith('/arithmetic')}
-    <section class="game-host" aria-label="Arithmetic">
-      <div class="game-section">
-        <SubNav {currentPath} gameType="arithmetic" />
-
-        <div class="game-content" role="region" aria-live="polite">
-          {#if currentPath === '/arithmetic' || currentPath === '/arithmetic/game'}
-            {#if TrainerComp}
-              <svelte:component this={TrainerComp} on:answer={handleAnswer} />
-            {:else}
-              <div class="loading">Loading…</div>
-            {/if}
-          {:else if currentPath === '/arithmetic/practice'}
-            {#if TrainerComp}
-              <svelte:component this={TrainerComp} on:answer={handleAnswer} />
-            {:else}
-              <div class="loading">Loading…</div>
-            {/if}
-          {:else}
-            <div class="learning-box">
-              <h2>Arithmetic Learning</h2>
-              <p>Review key concepts: basic operations, order of operations, mental math tricks.</p>
-            </div>
-          {/if}
-        </div>
-      </div>
-    </section>
-
-  {:else if currentPath.startsWith('/calculus')}
-    <section class="game-host" aria-label="Calculus">
-      <div class="game-section">
-        <SubNav {currentPath} gameType="calculus" />
-
-        <div class="game-content" role="region" aria-live="polite">
-          {#if currentPath === '/calculus' || currentPath === '/calculus/game'}
-            {#if CalcTrainerComp}
-              <svelte:component this={CalcTrainerComp} on:answer={handleAnswer} />
-            {:else}
-              <div class="loading">Loading…</div>
-            {/if}
-          {:else if currentPath === '/calculus/practice'}
-            {#if CalcTrainerComp}
-              <svelte:component this={CalcTrainerComp} on:answer={handleAnswer} />
-            {:else}
-              <div class="loading">Loading…</div>
-            {/if}
-          {:else}
-            <div class="learning-box">
-              <h2>Calculus Learning</h2>
-              <p>Basic derivatives, integration rules and trigonometric functions.</p>
-            </div>
-          {/if}
-        </div>
-      </div>
-    </section>
-
-  {:else if currentPath === '/about'}
-    <section class="game-host" aria-label="About">
-      {#if AboutComp}
-        <svelte:component this={AboutComp} />
-      {:else}
-        <div class="loading">Loading…</div>
-      {/if}
-    </section>
-
+  {#if $currentComponent}
+    <svelte:component this={$currentComponent} on:answer={handleAnswer} />
   {:else}
-    <section class="game-host" aria-label="Not found">
-      <div class="not-found">
-        <h2>404</h2>
-        <p>Route not found. <a href="/">Back to home</a>.</p>
-      </div>
-    </section>
+    <div class="loading">Loading...</div>
   {/if}
 </main>
 
