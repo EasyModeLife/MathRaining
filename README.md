@@ -1,57 +1,43 @@
-# MathRaining (Svelte)
+# MathRaining Game
 
-## 📦 Build & Deployment
+**Versión actual: Commit f0e8117** (Fase 1 refactor completada)
 
-### Comandos de Compilación
-- **`npm run build`** - Compila la aplicación optimizada para producción
-- **`npm run dev`** - Inicia servidor de desarrollo con hot reload
-- **`npm run deploy`** - Alias para `npm run build`
+## 🔄 Refactorización en Progreso
 
-### Configuración de Build
-El proyecto está configurado para compilar automáticamente en la carpeta `mathraining_app`:
+### 🚀 **Estado del Refactor (Fase 1 de 3)**
+- ✅ **Fase 1 Día 1**: Arquitectura primera completada
+- 🔄 **Fase 1 Día 2**: En desarrollo (CSS + UI)
+- 📋 **Fase 2**: Arquitectura avanzada (planeada)
+- 📋 **Fase 3**: Testing & optimización (planeada)
 
-```typescript
-// vite.config.ts
-build: {
-  outDir: 'mathraining_app',  // Carpeta de salida del build
-  base: './',                 // Rutas relativas para archivos estáticos
-  // ...
-}
+### 📈 **Mejoras Implementadas**
+- 🎯 **Arquitectura Modular**: 43 archivos organizados
+- 🛡️ **Type Safety**: 100% TypeScript strict
+- 📱 **Mobile Responsive**: Texto centrado perfecto
+- ⚡ **Performance**: Auto-fit inteligente
+- 🔧 **Mantenimiento**: Separación de responsabilidades
+
+### 📁 **Nueva Estructura**
+```
+/src
+├── components/     # UI Components (<50 líneas)
+├── logic/          # Business Logic (hooks)
+├── types/          # TypeScript definitions
+├── utils/          # Pure utility functions
+└── config/         # Centralized configuration
 ```
 
-### Deploy a Cloudflare Pages
-#### Opción 1: Automático con Git
-1. Conecta tu repositorio en Cloudflare Pages
-2. **Build command**: `npm run build`
-3. **Build output directory**: `mathraining_app`
-4. Deploy automáticamente cuando hagas push a main
+### 📋 **Próximos Pasos**
+1. **Refactor UI components** para usar hooks modulares
+2. **Unificar sistema CSS** eliminando duplicaciones
+3. **Testing completo** del sistema refactorizado
 
-#### Opción 2: Manual
-1. Ejecuta: `npm run build` (crea `mathraining_app`)
-2. Sube la carpeta completa `mathraining_app` a Cloudflare Pages
-3. Deploy listo!
+### 🔗 **Commits Relevantes**
+- `93da5b5`: Base funcional (pre-refactor)
+- `f0e8117`: Fase 1 Día 1 - Arquitectura modular
+- Próximo: Fase 1 Día 2 - CSS unification
 
-#### Archivos Generados en `mathraining_app`
-```bash
-mathraining_app/
-├── index.html          # Página principal
-├── 404.html           # Página de error
-├── _redirects         # Configuración de redirecciones
-├── robots.txt         # Configuración SEO
-└── assets/           # CSS, JS, imágenes y fonts optimizadas
-    ├── index-*.js     # Código JavaScript principal
-    ├── index-*.css    # Estilos principales
-    ├── katex-*.js     # Librería KaTeX
-    └── fonts/         # Todas las fuentes de KaTeX
-```
+---
 
-### Login a Production Build
-- ✅ Rutas relativas (`./assets/`) para funcionamiento óptimo
-- ✅ Optimizado con gzip compression
-- ✅ Code splitting automatizado
-- ✅ CSS y JS minificados
-- ✅ Soporte completo para MathRaining funcionalidad
-
-## 📖 Sobre MathRaining
-
-<div class="about-page">
+## 🎮 **Acerca del Juego**
+MathRaining es un juego educativo interactivo para practicar matemáticas con elementos de gamificación y diseño responsive.
