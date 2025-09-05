@@ -203,13 +203,16 @@
   }
 
   .learning-box {
-  padding: clamp(1.5rem, 5vw, 3rem);
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1.25rem, 6vw, 2rem);
   display: grid;
   place-items: center;
   gap: clamp(1rem, 3vh, 2rem);
   text-align: center;
   /* Ajuste: que la caja de "learning" coincida con el ancho del app-frame/problem box */
-  max-width: 500px; /* mobile default, igual que .app-frame */
+  max-width: clamp(380px, 90%, 650px); /* límites más conservadores */
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
   margin: 0 auto;
   }
 

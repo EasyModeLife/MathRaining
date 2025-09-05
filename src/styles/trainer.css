@@ -137,14 +137,7 @@
   flex-grow: 1;
 }
 
-.problem-text {
-  /* Fallback + override con cqi para no desbordar */
-  font-size: clamp(2rem, 10vw, 5rem);
-  font-size: clamp(2rem, 9cqi, 5rem);
-  font-weight: 700;
-  letter-spacing: 3px;
-  transition: transform .2s, opacity .2s;
-}
+
 
 .problem-wrapper.flash .problem-text { transform: scale(1.08); opacity: .2; }
 .problem-wrapper.penalty .problem-text { animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both; }
@@ -182,5 +175,3 @@
     padding: 1.5rem 2rem;
   }
 }
-
-

@@ -104,16 +104,24 @@
     display:grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto auto;
-    gap: 1rem;
+    gap: clamp(0.75rem, 2vw, 1rem);
+    min-height: 0;
   }
-  @media (min-width: 700px){
+  @media (min-width: 768px){
     .grid-modular{
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr auto auto;
+      gap: clamp(1rem, 2.5vw, 1.25rem);
     }
     :global([data-area="problem"]) { grid-column: 1 / -1; }
-    :global([data-area="image"]) { grid-column: 2; }
+    :global([data-area="image"]) { grid-column: 2; grid-row: 1 / 2; }
     :global([data-area="answer"]) { grid-column: 1 / -1; }
-  :global([data-area="footer"]) { grid-column: 1 / -1; }
+    :global([data-area="footer"]) { grid-column: 1 / -1; }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-modular {
+      gap: 1.5rem;
+    }
   }
 </style>

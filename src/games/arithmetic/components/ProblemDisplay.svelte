@@ -12,10 +12,10 @@
   // Ajuste automático de tamaño para que la expresión quepa en la caja
   let containerEl: HTMLDivElement;
   let fitboxEl: HTMLDivElement;
-  // Autoajuste vía font-size (px)
-  const BASE_PX = 64;
+  // Autoajuste vía font-size (px) - mutable para mobile
+  let BASE_PX = 64;
   const MIN_PX = 18;
-  const MAX_PX = 120;
+  let MAX_PX = 120;
   let fontPx = BASE_PX;
   let renderExpr = '';
   let usedMultiline = false;
@@ -93,7 +93,7 @@
   // Envuelve filas en un array de una columna con separadores de línea correctos (\\)
   function arrayOfRows(rows: string[]): string {
     const body = rows.map(r => r.trim()).filter(Boolean).join(' \\\\ ');
-    return `\\begin{array}{l}\n${body}\n\\end{array}`;
+    return `\\begin{array}{c}\n${body}\n\\end{array}`;
   }
 
   // Construye multilínea sin delimitadores externos
@@ -215,6 +215,30 @@
   async function fit() {
     if (isFitting) return; // evita reentradas
     isFitting = true;
+    if (window.innerWidth <= 600) {
+      // Mobile: Use simplified but complete fit system
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+
+      // Set mobile-specific constants
+      const mobileBase = vw <= 360 ? 28 : vw <= 480 ? 32 : 40; // Smaller base for mobile
+      const mobileMax = vw <= 360 ? 48 : vw <= 480 ? 56 : 64;  // Smaller max for mobile
+
+      // Adjust for very tall slim screens
+      if (vh > vw && vh/vw > 2) {
+        BASE_PX = Math.floor(mobileBase * 0.8);
+        MAX_PX = Math.floor(mobileMax * 0.8);
+      } else {
+        BASE_PX = mobileBase;
+        MAX_PX = mobileMax;
+      }
+    } else {
+      // Desktop: Use normal constants
+      BASE_PX = 64;
+      MAX_PX = 120;
+    }
+
+    // Now use the same fitting logic for both mobile and desktop
     if (question !== lastQuestion) {
       renderExpr = question;
       usedMultiline = false;
@@ -249,10 +273,13 @@
     }
 
     await tick(); // esperar inicial
-    if (!containerEl || !fitboxEl) return;
+    if (!containerEl || !fitboxEl) {
+      isFitting = false;
+      return;
+    }
 
-    const maxWidth = containerEl.clientWidth - 48; // margen extra para delimitadores
-    const maxHeight = containerEl.clientHeight - 16;
+    const maxWidth = containerEl.clientWidth - 32; // Más margen para móviles
+    const maxHeight = containerEl.clientHeight - 12;
 
     let best = { expr: question, size: MIN_PX, lines:1 };
 
@@ -362,7 +389,7 @@
   .judgement.multi { background:linear-gradient(90deg,#FF715B,#F9CB40,#BCED09,#2F52E0,#FF715B); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:400% 100%; animation:judgeburst .95s ease-out forwards, hue 2.2s linear infinite; }
   @keyframes judgeburst { 0% { transform:translateY(6px) scale(.6); opacity:.05; } 18% { transform:translateY(0) scale(1); opacity:.32; } 60% { opacity:.22; } 100% { transform:translateY(-10px) scale(.9); opacity:0; } }
   @keyframes hue { 0% { background-position:0% 50%; } 100% { background-position:100% 50%; } }
-  @media (max-width:900px){ .problem-display { font-size: 7rem; } }
-  @media (max-width:600px){ .problem-wrapper { height:30vh; } .problem-display { font-size: 5rem; letter-spacing:1.5px; } }
-  @media (max-height:640px){ .problem-wrapper { height:30vh; } }
+  /* Font sizing is now handled by the fit() system, no hardcoded media queries needed */
+  @media (max-width:600px){ .problem-wrapper { height:clamp(24vh, 32vh, 38vh); } }
+  @media (max-height:640px){ .problem-wrapper { height:clamp(24vh, 30vh, 36vh); } }
 </style>
