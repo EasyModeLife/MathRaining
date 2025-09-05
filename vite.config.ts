@@ -3,7 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  base: './',
+  base: '/',
   plugins: [
     svelte(),
     // Add bundle analyzer (only in production builds)
