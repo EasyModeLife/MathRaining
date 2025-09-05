@@ -10,8 +10,8 @@
   const router = createPageRouter(path);
 
   // Get reactive stores from router
-  $: currentRoute = $router.getCurrentRoute();
-  $: currentComponent = $router.getCurrentComponent();
+  const currentRouteStore = router.getCurrentRoute();
+  const currentComponentStore = router.getCurrentComponent();
 
   // Handle answer events from games
   function handleAnswer(event: CustomEvent) {
@@ -25,8 +25,8 @@
 </script>
 
 <main class="page-main">
-  {#if $currentComponent}
-    <svelte:component this={$currentComponent} on:answer={handleAnswer} />
+  {#if $currentComponentStore}
+    <svelte:component this={$currentComponentStore} on:answer={handleAnswer} />
   {:else}
     <div class="loading">Loading...</div>
   {/if}

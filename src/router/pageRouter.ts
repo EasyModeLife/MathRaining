@@ -34,14 +34,22 @@ export class PageRouter {
       }
     }
 
-    // Prefix match for dynamic routes
+    // Prefix match for sub-routes (e.g. /arithmetic/instructions matches /arithmetic prefix)
     for (const route of ROUTES) {
-      if (route.path !== '*' && path.startsWith(route.path)) {
-        return {
-          route,
-          params: {},
-          query: {}
-        };
+      if (route.path !== '*' && path.startsWith(route.path + '/')) {
+        // Find the exact sub-route
+        const exactSubRoute = ROUTES.find(r =>
+          r.path === path &&
+          r.path.startsWith(route.path + '/')
+        );
+
+        if (exactSubRoute) {
+          return {
+            route: exactSubRoute,
+            params: {},
+            query: {}
+          };
+        }
       }
     }
 

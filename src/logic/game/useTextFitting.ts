@@ -1,6 +1,6 @@
 import { onMount, tick } from 'svelte';
 import type { TextFittingResult, TextCandidate } from '../../types/game';
-import { BREAKPOINTS, BASE_FONT_SIZE, MIN_FONT_SIZE, MAX_FONT_SIZE } from '../../config/gameConfig';
+import { GAME_CONFIG } from '../../config/gameConfig';
 import { useMultilineLogic } from './useMultiline';
 
 // =========================
@@ -17,7 +17,7 @@ export function useTextFitting(
   containerEl: HTMLElement | null,
   fitboxEl: HTMLElement | null
 ) {
-  let fontPx: number = BASE_FONT_SIZE.desktop; // Start with desktop size
+  let fontPx: number = GAME_CONFIG.fontSize.base; // Start with base font size
   let renderExpr = question;
   let usedMultiline = false;
   let lastQuestion = '';
@@ -42,18 +42,18 @@ export function useTextFitting(
     isFitting = true;
 
     // Mobile-specific font sizes
-    const isMobile = window.innerWidth <= BREAKPOINTS.mobile;
+    const isMobile = window.innerWidth <= GAME_CONFIG.breakpoints.mobile;
     if (isMobile) {
       const vw = window.innerWidth;
       if (vw <= 360) {
-        fontPx = BASE_FONT_SIZE.mobile; // 28px
+        fontPx = GAME_CONFIG.textSizing.mobile.baseFontSize; // 32px
       } else if (vw <= 480) {
         fontPx = 32; // Small mobile
       } else {
         fontPx = 40; // Regular mobile
       }
     } else {
-      fontPx = BASE_FONT_SIZE.desktop; // 64px for desktop/tablet
+      fontPx = GAME_CONFIG.textSizing.desktop.baseFontSize; // 64px for desktop/tablet
     }
 
     // Update expression if question changed
@@ -80,7 +80,7 @@ export function useTextFitting(
     const maxWidth = containerEl.clientWidth - (isMobile ? 32 : 48);
     const maxHeight = containerEl.clientHeight - (isMobile ? 12 : 16);
 
-    let best: TextCandidate = { expr: question, size: MIN_FONT_SIZE.desktop, lines: 1 };
+    let best: TextCandidate = { expr: question, size: GAME_CONFIG.textSizing.desktop.minFontSize, lines: 1 };
 
     // Test each candidate
     for (const cand of candidates) {
@@ -93,8 +93,8 @@ export function useTextFitting(
       if (rect.width > 0 && rect.height > 0) {
         const scale = Math.min(maxWidth / rect.width, maxHeight / rect.height);
         const calculatedSize = Math.max(
-          isMobile ? MIN_FONT_SIZE.mobile : MIN_FONT_SIZE.desktop,
-          Math.min(isMobile ? MAX_FONT_SIZE.mobile : MAX_FONT_SIZE.desktop,
+          isMobile ? GAME_CONFIG.textSizing.mobile.minFontSize : GAME_CONFIG.textSizing.desktop.minFontSize,
+          Math.min(isMobile ? GAME_CONFIG.textSizing.mobile.maxFontSize : GAME_CONFIG.textSizing.desktop.maxFontSize,
           Math.floor(scale * testSize * 0.96))
         );
 
