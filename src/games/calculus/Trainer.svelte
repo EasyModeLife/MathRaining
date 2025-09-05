@@ -52,9 +52,26 @@
     let val = raw.trim();
     input = val;
     if(!val) return;
-    // Normalización básica para coincidencias simples
-    const norm = (s:string)=> s.replace(/\\/g,'').replace(/\{(\d+)\}/g, '$1').replace(/frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2').replace(/\^\{(\w+)\}/g,'^$1').replace(/\s+/g,' ').replace(/\s([+\-])/g,' $1').replace(/^\+\s?/,'').trim().toLowerCase();
-    if(norm(val) === norm(current.answer)){
+    // Enhanced normalization for better LaTeX answer matching
+    const norm = (s:string)=> {
+      return s
+        .replace(/\\/g,'') // Remove backslashes
+        .replace(/\{(\d+)\}/g, '$1') // Unwrap single digit braces {2} -> 2
+        .replace(/frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2') // Convert fractions
+        .replace(/\^\{(\w+)\}/g,'^$1') // Unwrap exponent braces ^{2} -> ^2
+        .replace(/\^\{([^}]*)\}/g,'^$1') // Handle multi-char exponents ^{xy} -> ^xy
+        .replace(/\s*([-+])\s*/g, '$1') // Normalize operator spacing
+        .replace(/\s+/g,' ') // Collapse multiple spaces
+        .replace(/^\+\s?/,'') // Remove leading plus
+        .replace(/^-\s*0(\s|$)/,'0$1') // -0 -> 0
+        .trim()
+        .toLowerCase();
+    };
+    // Handle constant-only answers (like -2)
+    const normalizedVal = norm(val);
+    const normalizedAnswer = norm(current.answer);
+    const isCorrect = normalizedVal === normalizedAnswer;
+    if(isCorrect){
       judgementLabel = 'correct'; judgementColor = '#BCED09'; judgementId+=1; flash=true; correct+=1; dispatch('answer',{correct:true});
       const levelComplete = correct >= level.total;
       setTimeout(()=>{

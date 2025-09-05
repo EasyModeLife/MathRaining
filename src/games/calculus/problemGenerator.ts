@@ -19,7 +19,7 @@ export function rand(min: number, max: number): number {
 }
 
 export function timeFor(topic: CalcTopic): number {
-  const BASE_QUESTION_TIME = 12000;
+  const BASE_QUESTION_TIME = 17000;
   if (topic === 'derivative-trig') return BASE_QUESTION_TIME - 2000;
   if (topic === 'differential-poly') return BASE_QUESTION_TIME + 2000;
   return BASE_QUESTION_TIME;
@@ -99,7 +99,8 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
   if (coeffs.every(c => c === 0)) coeffs = [rand(1, 6), ...coeffs.slice(1)];
     const poly = polyToLaTeX(coeffs);
     const q = `\\frac{d}{dx} [${poly}]`;
-    const ans = polyToLaTeX(derivativePoly(coeffs)).replace(/^\+\s?/, '').trim();
+    const derivedCoeffs = derivativePoly(coeffs);
+    const ans = polyToLaTeX(derivedCoeffs).replace(/^\+\s?/, '').trim();
     const id = `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
     return { id, question: q, answer: ans, topic, timeMs: timeFor(topic) };
   }
