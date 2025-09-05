@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
-  import { getCalcLevel, nextCalcLevel, type CalcLevel, type CalcTopic } from './levels';
+  import { getCalcLevel, nextCalcLevel, type CalcLevel } from './levels';
   import GameFrame from '../../components/GameFrame.svelte';
   import MathRenderer from '../../components/Math.svelte';
   import '../arithmetic/styles/trainer.css';
 
   const dispatch = createEventDispatcher();
 
-  interface Exercise { id:string; question:string; answer:string; topic:CalcTopic; timeMs:number }
+  import { createProblemGenerator, type Exercise, type CalcTopic } from './problemGenerator';
 
   let level: CalcLevel = getCalcLevel(1)!;
   let current: Exercise;
@@ -29,99 +29,8 @@
 
   $: displayCorrect = Math.max(0, correct);
 
-  function rand(min:number,max:number){ return Math.floor(Math.random()*(max-min+1))+min; }
-
-  function timeFor(topic: CalcTopic){
-    if(topic==='derivative-trig') return BASE_QUESTION_TIME - 2000;
-    if(topic==='differential-poly') return BASE_QUESTION_TIME + 2000;
-    return BASE_QUESTION_TIME;
-  }
-
-  // Generadores básicos didácticos (no CAS)
-  function polyToString(coeffs:number[]):string {
-    // coeffs for descending powers, e.g., [3,0,-2] -> 3x^2 - 2
-    // Devuelve expresión LaTeX sin espacios superfluos
-    const parts: string[] = [];
-    coeffs.forEach((c,i)=>{
-      const pow = coeffs.length-1-i;
-      if(c===0) return;
-      const sign = c>0?'+':'-';
-      const abs = Math.abs(c);
-      let term = '';
-      if(pow===0) term = `${abs}`;
-      else if(abs===1) term = `x${pow===1?'':`^{${pow}}`}`;
-      else term = `${abs}x${pow===1?'':`^{${pow}}`}`;
-      parts.push(`${sign} ${term}`);
-    });
-    let s = parts.join(' ');
-    s = s.replace(/^\+\s?/,'').trim();
-    return s || '0';
-  }
-
-  function derivativePoly(coeffs:number[]):number[]{
-    const res: number[] = [];
-    for(let i=0;i<coeffs.length-1;i++){
-      const pow = coeffs.length-1-i;
-      res.push(coeffs[i]*pow);
-    }
-    return res.length?res:[0];
-  }
-  function integralPoly(coeffs:number[]):string{
-    const parts: string[] = [];
-    for(let i=0;i<coeffs.length;i++){
-      const pow = coeffs.length-1-i;
-      const np = pow+1;
-      const c = coeffs[i]/np;
-      if(c===0) continue;
-      const sign = c>0?'+':'-';
-      const abs = Math.abs(c);
-      parts.push(`${sign} ${abs===1? '':abs}${np===0?'':'x'}${np>1?`^{${np}}`:''}`);
-    }
-    const s = parts.join(' ').replace(/^\+\s/,'').trim();
-    return s ? `${s} + C` : 'C';
-  }
-
   function gen(): Exercise {
-    const topic = level.topics[rand(0, level.topics.length-1)];
-    if(topic==='derivative-poly'){
-      const deg = rand(1,3);
-      const coeffs = Array.from({length:deg+1},()=>rand(-6,6));
-      if(coeffs[0]===0) coeffs[0]=rand(1,6);
-      const q = `\\displaystyle \\frac{d}{dx}\left[ ${polyToString(coeffs)} \right]`;
-      const ans = polyToString(derivativePoly(coeffs));
-    const id = (globalThis.crypto?.randomUUID?.()) ?? Math.random().toString(36).slice(2);
-    return { id, question:q, answer:ans.replace(/^\+\s?/,'').trim(), topic, timeMs: timeFor(topic) };
-    }
-    if(topic==='integral-poly'){
-      const deg = rand(0,3);
-      const coeffs = Array.from({length:deg+1},()=>rand(-5,5));
-      const sumAbs = coeffs.reduce((a,c)=>a+Math.abs(c),0);
-      if(sumAbs===0) coeffs[deg]=1;
-      const q = `\\displaystyle \\int \! ( ${polyToString(coeffs)} ) \\; dx`;
-      const ans = integralPoly(coeffs);
-      return { id:Math.random().toString(36).slice(2), question:q, answer:ans, topic, timeMs: timeFor(topic) };
-    }
-    if(topic==='derivative-trig'){
-      const opts = ['sin x','cos x','tan x'];
-      const pick = opts[rand(0,opts.length-1)];
-      const q = `\\displaystyle \\frac{d}{dx}\\left[ ${pick} \right]`;
-      const ans = pick==='sin x' ? '\\cos x' : pick==='cos x' ? '- \\sin x' : '\\sec^{2} x';
-      return { id:Math.random().toString(36).slice(2), question:q, answer:ans, topic, timeMs: timeFor(topic) };
-    }
-    // differential-poly
-    const deg = rand(1,3);
-    const coeffs = Array.from({length:deg+1},()=>rand(-5,5));
-    if(coeffs[0]===0) coeffs[0]=rand(1,5);
-    const fprime = derivativePoly(coeffs);
-    const x0 = rand(-4,4);
-    const q = `\\text{Si } y = ${polyToString(coeffs)},\\ \text{ encontrar } dy \\text{ en } x=${x0}\\ (dy = y'(x)\\,dx)`;
-    const yprime = polyToString(fprime).replace(/^\+\s?/,'');
-    const ans = `dy = ( ${yprime} ) \\, dx,\\ \quad y'(${x0}) = ${evalPoly(fprime, x0)}`;
-  return { id:Math.random().toString(36).slice(2), question:q, answer:ans, topic:'differential-poly', timeMs: timeFor('differential-poly') };
-  }
-
-  function evalPoly(coeffs:number[], x:number){
-    return coeffs.reduce((acc,c)=> acc*x + c, 0);
+    return createProblemGenerator(level.topics);
   }
 
   function next(){

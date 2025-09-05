@@ -23,9 +23,9 @@
   let fitQueued = false;
   let isFitting = false;
 
-  // Separa en N líneas (2..6) por + y - a nivel superior (fuera de llaves)
-  function splitTopLevelByPlusMinus(latex: string, lines: number): string[] | null {
-    if (lines < 2) return null;
+  // Calcular número óptimo de líneas basado en término por línea
+  function calculateOptimalLines(latex: string, maxLines: number = 6): number {
+    // Contar términos (separados por + y - a nivel superior)
     const ops: number[] = [];
     let depth = 0;
     let escaping = false;
@@ -40,25 +40,54 @@
         ops.push(i);
       }
     }
-    if (ops.length === 0) return null;
-    const cuts: number[] = [];
-    for (let k = 1; k < lines; k++) {
-      const target = Math.floor((k * ops.length) / lines);
-      const idx = Math.min(Math.max(target, 0), ops.length - 1);
-      const pos = ops[idx];
-      if (!cuts.includes(pos)) cuts.push(pos);
+    const totalTerms = ops.length + 1; // términos = operadores + 1
+
+    // Estrategia: máximo 3 términos por línea
+    const termsPerLine = 3;
+    const requiredLines = Math.ceil(totalTerms / termsPerLine);
+    return Math.max(1, Math.min(requiredLines, maxLines));
+  }
+
+  // Separa en líneas con número fijo de términos por línea
+  function splitByTermsPerLine(latex: string, termsPerLine: number = 3): string[] | null {
+    const ops: number[] = [];
+    let depth = 0;
+    let escaping = false;
+    for (let i = 0; i < latex.length; i++) {
+      const ch = latex[i];
+      if (escaping) { escaping = false; continue; }
+      if (ch === '\\') { escaping = true; continue; }
+      if (ch === '{') { depth++; continue; }
+      if (ch === '}') { depth = Math.max(0, depth - 1); continue; }
+      if (depth === 0 && (ch === '+' || ch === '-')) {
+        if (i === 0) continue; // signo unario al inicio
+        ops.push(i);
+      }
     }
-    cuts.sort((a, b) => a - b);
+
+    if (ops.length === 0) return null; // solo un término, no dividir
+
     const parts: string[] = [];
     let start = 0;
-    for (const cut of cuts) {
-      const head = latex.slice(start, cut).trim();
-      if (head) parts.push(head);
-      start = cut; // operador se conserva al inicio del siguiente
+    let remainingOps = [...ops];
+
+    while (remainingOps.length >= termsPerLine) {
+      // Tomar los primeros termsPerLine operadores
+      const cutOps = remainingOps.slice(0, termsPerLine);
+      const lastOpIndex = cutOps[termsPerLine - 1];
+      const cutPos = lastOpIndex;
+
+      const segment = latex.slice(start, cutPos).trim();
+      if (segment) parts.push(segment);
+      start = cutPos;
+      remainingOps = remainingOps.slice(termsPerLine);
     }
+
+    // Agregar el resto
     const tail = latex.slice(start).trim();
     if (tail) parts.push(tail);
-    return parts;
+
+    return parts.length > 1 ? parts : null;
   }
 
   // Envuelve filas en un array de una columna con separadores de línea correctos (\\)
@@ -69,7 +98,7 @@
 
   // Construye multilínea sin delimitadores externos
   function breakIntoNLines(latex: string, lines: number): string | null {
-    const rows = splitTopLevelByPlusMinus(latex, lines);
+    const rows = splitByTermsPerLine(latex, Math.ceil(calculateOptimalLines(latex) * 3 / lines));
     if (!rows || rows.length < 2) return null;
     return arrayOfRows(rows);
   }
@@ -143,7 +172,7 @@
   function multilineInsideDelims(latex: string, lines: number): string | null {
     const found = findFirstLeftRight(latex);
     if (found) {
-      const rows = splitTopLevelByPlusMinus(found.inside, lines);
+      const rows = splitByTermsPerLine(found.inside, Math.ceil(calculateOptimalLines(found.inside) * 3 / lines));
       if (rows && rows.length >= 2) {
         const arr = arrayOfRows(rows);
         return `${found.pre}\\left${found.leftTok} ${arr} \\right${found.rightTok}${found.post}`;
@@ -171,7 +200,7 @@
         const pre = latex.slice(0, start);
         const inside = latex.slice(start+1, end);
         const post = latex.slice(end+1);
-        const rows = splitTopLevelByPlusMinus(inside, lines);
+        const rows = splitByTermsPerLine(inside, Math.ceil(calculateOptimalLines(inside) * 3 / lines));
         if (rows && rows.length>=2){
           const arr = arrayOfRows(rows);
           return `${pre}( ${arr} )${post}`;
@@ -191,20 +220,32 @@
       usedMultiline = false;
       lastQuestion = question;
     }
-    // construir candidatos (1..6 líneas)
+    // Determinar número óptimo de líneas y construir candidatos
+    const optimalLines = calculateOptimalLines(question);
     const candidates: { expr:string, lines:number }[] = [{ expr: question, lines: 1 }];
-    const hasDelims = /\\left|\\right/.test(question);
-    for (let n = 2; n <= 6; n++) {
-      // Si hay delimitadores, solo anidar dentro de ellos
+
+    if (optimalLines > 1) {
+      const hasDelims = /\\left|\\right/.test(question);
+
+      // Intentar dividir en el número óptimo de líneas
       if (hasDelims) {
-        const inside = multilineInsideDelims(question, n);
-        if (inside) candidates.push({ expr: inside, lines: n });
-        continue;
+        const inside = multilineInsideDelims(question, optimalLines);
+        if (inside) candidates.push({ expr: inside, lines: optimalLines });
+      } else {
+        const b = breakIntoNLines(question, optimalLines);
+        if (b) candidates.push({ expr: b, lines: optimalLines });
       }
-      const inside = multilineInsideDelims(question, n);
-      if (inside) { candidates.push({ expr: inside, lines: n }); continue; }
-      const b = breakIntoNLines(question, n);
-      if (b) candidates.push({ expr: b, lines: n });
+
+      // También probar con menos líneas por si acaso
+      for (let n = optimalLines - 1; n >= 2; n--) {
+        if (hasDelims) {
+          const inside = multilineInsideDelims(question, n);
+          if (inside) candidates.push({ expr: inside, lines: n });
+        } else {
+          const b = breakIntoNLines(question, n);
+          if (b) candidates.push({ expr: b, lines: n });
+        }
+      }
     }
 
     await tick(); // esperar inicial
