@@ -11,6 +11,7 @@
   $: navLinks = [
     { path: `/${gameType}/game`, label: 'Game', ariaCurrent: currentPath === `/${gameType}` || currentPath === `/${gameType}/game` },
     { path: `/${gameType}/practice`, label: 'Practice', ariaCurrent: currentPath === `/${gameType}/practice` },
+    { path: `/${gameType}/instructions`, label: 'Instructions', ariaCurrent: currentPath === `/${gameType}/instructions` },
     { path: `/${gameType}/learning`, label: 'Learning', ariaCurrent: currentPath === `/${gameType}/learning` }
   ];
 </script>
