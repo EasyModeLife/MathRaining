@@ -1,10 +1,18 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   base: './',
   plugins: [
     svelte(),
+    // Add bundle analyzer (only in production builds)
+    ...(process.env.ANALYZE === 'true' ? [visualizer({
+      filename: 'dist/bundle-analysis.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    })] : []),
   ],
   build: {
     outDir: 'mathraining_app',
