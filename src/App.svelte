@@ -8,6 +8,7 @@
   let calcLoadError: string | null = null;
   import MathRenderer from './components/Math.svelte';
   import { path, navigate } from './router';
+  import { theme, cycleTheme, initTheme, labelForTheme } from './theme';
   const MathComp: any = MathRenderer as any; // alias corto solo para tarjetas de Home
 
    // Estado de ruta derivado del pathname
@@ -56,8 +57,9 @@
     setTimeout(() => (flashColor = 'transparent'), 250);
   }
 
-  // Permite volver con tecla Escape
+  // Inicializa tema y accesos rápidos
   onMount(() => {
+    initTheme();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') navigate('/');
     };
@@ -91,6 +93,7 @@
    // Tamaños porcentuales para header/main/footer
   const HEADER_PCT = 12; // % de la página
   const FOOTER_PCT = 8;  // % de la página
+  $: currentThemeLabel = labelForTheme($theme);
 </script>
 
 <div class="page" style={`--header:${HEADER_PCT}%;--footer:${FOOTER_PCT}%`}>
@@ -104,9 +107,12 @@
   <small class="view-indicator" aria-live="polite">{currentPath}</small>
       </div>
       <nav class="nav">
-        <a class="action" href="https://github.com/sponsors/EasyModeLife" target="_blank" rel="noopener noreferrer" title="Donar">Donar</a>
-        <a class="action" href="https://github.com/EasyModeLife/RainingMath" target="_blank" rel="noopener noreferrer" title="GitHub">GitHub</a>
-        <a class="action" href="/about" title="Acerca de">About</a>
+        <button class="action theme-btn" on:click={cycleTheme} title="Cambiar tema" aria-label="Cambiar tema">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 4V2M12 22v-2M4.93 4.93 3.51 3.51M20.49 20.49l-1.42-1.42M4 12H2M22 12h-2M4.93 19.07 3.51 20.49M20.49 3.51l-1.42 1.42" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </button>
       </nav>
     </div>
   </header>
@@ -245,7 +251,14 @@
   </main>
 
   <footer class="page-footer">
-    <p class="foot-text">Entrenamiento sin anuncios y respetuoso con tu privacidad.</p>
+    <div class="footer-box">
+      <nav class="nav footer-nav">
+        <a class="action" href="https://github.com/sponsors/EasyModeLife" target="_blank" rel="noopener noreferrer" title="Donar">Donar</a>
+        <a class="action" href="https://github.com/EasyModeLife/RainingMath" target="_blank" rel="noopener noreferrer" title="GitHub">GitHub</a>
+        <a class="action" href="/about" title="Acerca de" on:click|preventDefault={() => navigate('/about')}>About</a>
+      </nav>
+      <p class="foot-text">Entrenamiento sin anuncios y respetuoso con tu privacidad.</p>
+    </div>
   </footer>
 </div>
 
@@ -312,6 +325,9 @@
     display:inline-flex; align-items:center; gap:.4rem;
   }
   .action:hover { filter: brightness(1.1); }
+  .action:active { transform: translateY(1px); }
+  .theme-btn { display:inline-grid; place-items:center; padding:.45rem; width: 38px; height: 38px; }
+  .theme-btn .icon { display:block; }
 
   /* Overlay de feedback, limitado a main */
   .flash-overlay {
@@ -390,6 +406,8 @@
 
   /* Footer */
   .page-footer { display:grid; place-items:center; }
+  .footer-box { width:100%; max-width:1100px; margin:0 auto; padding:.5rem .75rem; display:grid; gap:.5rem; justify-items:center; }
+  .footer-nav { gap:.5rem; }
   .foot-text { margin:0; font-size: clamp(.78rem, 1.6vw, .9rem); opacity:.85; text-align:center; padding: 0 .75rem; }
 
   /* Header backdrop opcional */
