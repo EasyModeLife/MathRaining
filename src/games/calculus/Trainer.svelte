@@ -53,7 +53,7 @@
     input = val;
     if(!val) return;
     // Normalización básica para coincidencias simples
-    const norm = (s:string)=> s.replace(/\\/g,'').replace(/\^\{(\w+)\}/g,'^$1').replace(/\s+/g,' ').replace(/\s([+\-])/g,' $1').replace(/^\+\s?/,'').trim().toLowerCase();
+    const norm = (s:string)=> s.replace(/\\/g,'').replace(/\{(\d+)\}/g, '$1').replace(/frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2').replace(/\^\{(\w+)\}/g,'^$1').replace(/\s+/g,' ').replace(/\s([+\-])/g,' $1').replace(/^\+\s?/,'').trim().toLowerCase();
     if(norm(val) === norm(current.answer)){
       judgementLabel = 'correct'; judgementColor = '#BCED09'; judgementId+=1; flash=true; correct+=1; dispatch('answer',{correct:true});
       const levelComplete = correct >= level.total;
