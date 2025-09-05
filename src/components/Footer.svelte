@@ -1,7 +1,7 @@
 <script lang="ts">
   import { navigate } from '../router';
 
-  export let FOOTER_PCT: number = 8;
+  export let FOOTER_PCT: number = 5;
 
   function goHome() {
     navigate('/');
@@ -35,13 +35,13 @@
       </button>
     </div>
 
-    <p class="footer-text">Entrenamiento sin anuncios y respetuoso con tu privacidad.</p>
+<!-- Texto removido según solicitud -->
   </div>
 </footer>
 
 <style>
   .page-footer {
-    height: var(--footer, 8%);
+    height: var(--footer, 5%);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -57,11 +57,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(1rem, 3vh, 2rem);
+    gap: clamp(0.5rem, 1vh, 1rem);
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    padding: clamp(1.5rem, 4vw, 3rem) clamp(2rem, 6vw, 4rem);
+    padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
     box-sizing: border-box;
   }
 
@@ -76,8 +76,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: clamp(48px, 12vw, 64px);
-    height: clamp(48px, 12vw, 64px);
+    width: clamp(36px, 10vw, 48px);
+    height: clamp(36px, 10vw, 48px);
     border-radius: 50%;
     background: rgba(255,255,255,.04);
     border: 1px solid rgba(255,255,255,.1);
@@ -128,24 +128,24 @@
   /* Responsive breakpoints optimizados */
   @media (max-width: 768px) {
     .footer-buttons {
-      gap: clamp(1.25rem, 3.5vw, 2.5rem);
+      gap: clamp(1rem, 3vw, 2rem);
     }
 
     .footer-btn {
-      width: clamp(44px, 10vw, 56px);
-      height: clamp(44px, 10vw, 56px);
+      width: clamp(36px, 9vw, 48px);
+      height: clamp(36px, 9vw, 48px);
     }
 
     .icon {
-      width: clamp(18px, 4vw, 24px);
-      height: clamp(18px, 4vw, 24px);
+      width: clamp(16px, 4vw, 20px);
+      height: clamp(16px, 4vw, 20px);
     }
   }
 
   @media (max-width: 640px) {
     .footer-container {
-      padding: clamp(1.25rem, 3.5vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
-      gap: clamp(1.25rem, 3.5vh, 2rem);
+      padding: clamp(0.75rem, 2.5vw, 1.5rem) clamp(1.25rem, 3vw, 2rem);
+      gap: clamp(1rem, 2.5vh, 1.5rem);
     }
 
     .footer-buttons {

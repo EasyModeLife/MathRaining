@@ -197,7 +197,7 @@
           </ul>
         </div>
       {/if}
-      <h1 class="main-title">The Math Games</h1>
+      <h1 class="main-title">MathRaining</h1>
       <LevelProgress
         levelId={level.id}
         total={level.total}
@@ -236,4 +236,3 @@
     </main>
   </div>
 </div>
- 

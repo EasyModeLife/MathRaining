@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mathraining",
+  "main": "dist/_astro/server/entry.cloudflare-pages.mjs",
+  "compatibility_date": "2024-01-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "pages_build_output_dir": "dist",
+  "build": {
+    "command": "npm run build"
+  }
+}

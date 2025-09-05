@@ -13,7 +13,7 @@
       {#if currentPath !== '/'}
         <button class="back" on:click={goHome} aria-label="Volver">⟵</button>
       {/if}
-      <h1 class="title">The Math Games</h1>
+      <h1 class="title">MathRaining</h1>
       <small class="view-indicator" aria-live="polite">{currentPath}</small>
     </div>
     <nav class="nav">

@@ -172,7 +172,7 @@
 </script>
 
 <GameFrame
-  title="The Math Games"
+  title="MathRaining"
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}
@@ -192,4 +192,3 @@
   <span slot="footer-left"><MathRenderer expr={`\\displaystyle \\text{Time: } ${((performance.now()-start)/1000).toFixed(1)}\\,\\text{s}`}/></span>
   <span slot="footer-right"><MathRenderer expr={`\\text{Range: } ${level.min}\\text{--}${level.max}\\quad \\text{Ops: } ${level.ops.join('\\,')}`}/></span>
 </GameFrame>
- 

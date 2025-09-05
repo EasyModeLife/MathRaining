@@ -57,26 +57,26 @@
 
 <main class="page-main">
   {#if currentPath === '/'}
-    <section class="games-grid" aria-label="Juegos disponibles">
+    <section class="games-grid" aria-label="Available games">
       <GameCard
-        title="Aritmética"
-        description="Practica sumas, restas, multiplicación y división con límite de tiempo y niveles crecientes."
+        title="Arithmetic"
+        description="Practice addition, subtraction, multiplication and division with time limits and increasing levels."
         mathExpr={'\\times\\ \\div\\ +\\ -'}
         onClick={openArithmetic}
-        ariaLabel="Entrar a Aritmética"
+        ariaLabel="Enter Arithmetic"
       />
 
       <GameCard
-        title="Cálculo"
-        description="Derivadas, integrales y diferenciales intro con verificación de texto."
+        title="Calculus"
+        description="Basic derivatives, integration rules and trigonometric functions with text verification."
         mathExpr={'\\int \\; \\frac{d}{dx}'}
         onClick={openCalculus}
-        ariaLabel="Entrar a Cálculo"
+        ariaLabel="Enter Calculus"
       />
     </section>
 
   {:else if currentPath.startsWith('/arithmetic')}
-    <section class="game-host" aria-label="Aritmética">
+    <section class="game-host" aria-label="Arithmetic">
       <div class="game-section">
         <SubNav {currentPath} gameType="arithmetic" />
 
@@ -85,18 +85,18 @@
             {#if TrainerComp}
               <svelte:component this={TrainerComp} on:answer={handleAnswer} />
             {:else}
-              <div class="loading">Cargando…</div>
+              <div class="loading">Loading…</div>
             {/if}
           {:else if currentPath === '/arithmetic/practice'}
             {#if TrainerComp}
               <svelte:component this={TrainerComp} on:answer={handleAnswer} />
             {:else}
-              <div class="loading">Cargando…</div>
+              <div class="loading">Loading…</div>
             {/if}
           {:else}
             <div class="learning-box">
-              <h2>Aprendizaje de Aritmética</h2>
-              <p>Repasa conceptos clave: operaciones básicas, jerarquía de operaciones, trucos mentales.</p>
+              <h2>Arithmetic Learning</h2>
+              <p>Review key concepts: basic operations, order of operations, mental math tricks.</p>
             </div>
           {/if}
         </div>
@@ -104,7 +104,7 @@
     </section>
 
   {:else if currentPath.startsWith('/calculus')}
-    <section class="game-host" aria-label="Cálculo">
+    <section class="game-host" aria-label="Calculus">
       <div class="game-section">
         <SubNav {currentPath} gameType="calculus" />
 
@@ -113,18 +113,18 @@
             {#if CalcTrainerComp}
               <svelte:component this={CalcTrainerComp} on:answer={handleAnswer} />
             {:else}
-              <div class="loading">Cargando…</div>
+              <div class="loading">Loading…</div>
             {/if}
           {:else if currentPath === '/calculus/practice'}
             {#if CalcTrainerComp}
               <svelte:component this={CalcTrainerComp} on:answer={handleAnswer} />
             {:else}
-              <div class="loading">Cargando…</div>
+              <div class="loading">Loading…</div>
             {/if}
           {:else}
             <div class="learning-box">
-              <h2>Aprendizaje de Cálculo</h2>
-              <p>Derivadas básicas, reglas de integración y funciones trigonométricas.</p>
+              <h2>Calculus Learning</h2>
+              <p>Basic derivatives, integration rules and trigonometric functions.</p>
             </div>
           {/if}
         </div>
@@ -132,19 +132,19 @@
     </section>
 
   {:else if currentPath === '/about'}
-    <section class="game-host" aria-label="Acerca de">
+    <section class="game-host" aria-label="About">
       {#if AboutComp}
         <svelte:component this={AboutComp} />
       {:else}
-        <div class="loading">Cargando…</div>
+        <div class="loading">Loading…</div>
       {/if}
     </section>
 
   {:else}
-    <section class="game-host" aria-label="No encontrado">
+    <section class="game-host" aria-label="Not found">
       <div class="not-found">
         <h2>404</h2>
-        <p>Ruta no encontrada. <a href="/">Volver al inicio</a>.</p>
+        <p>Route not found. <a href="/">Back to home</a>.</p>
       </div>
     </section>
   {/if}
@@ -203,13 +203,14 @@
   }
 
   .learning-box {
-    padding: clamp(1.5rem, 5vw, 3rem);
-    display: grid;
-    place-items: center;
-    gap: clamp(1rem, 3vh, 2rem);
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  display: grid;
+  place-items: center;
+  gap: clamp(1rem, 3vh, 2rem);
+  text-align: center;
+  /* Ajuste: que la caja de "learning" coincida con el ancho del app-frame/problem box */
+  max-width: 500px; /* mobile default, igual que .app-frame */
+  margin: 0 auto;
   }
 
   .learning-box h2 {
@@ -285,7 +286,7 @@
     }
 
     .learning-box {
-      padding: 2rem 1.5rem;
+  padding: 2rem 1.5rem;
     }
 
     .not-found {
@@ -295,6 +296,11 @@
     .loading {
       padding: 3rem 1.5rem;
     }
+  }
+
+  /* Desktop/tablet: aumentar el max-width para que coincida con .app-frame en trainer.css */
+  @media (min-width: 768px) {
+    .learning-box { max-width: 700px; }
   }
 
   @media (max-width: 640px) {

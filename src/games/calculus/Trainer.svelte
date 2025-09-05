@@ -85,7 +85,7 @@
 </script>
 
 <GameFrame
-  title="Cálculo"
+  title="Calculus"
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}
@@ -103,5 +103,5 @@
   handleInputKey={handleInputKey}
 >
   <span slot="footer-left"><MathRenderer expr={`\\displaystyle \\text{Time: } ${((performance.now()-start)/1000).toFixed(1)}\\,\\text{s}`}/></span>
-  <span slot="footer-right">Nivel: {level.id} • Tópicos: {level.topics.length}</span>
+  <span slot="footer-right">Level: {level.id} • Topics: {level.topics.length}</span>
 </GameFrame>

@@ -15,48 +15,64 @@
   ];
 </script>
 
-<nav class="subnav" aria-label="Secciones de {gameType === 'arithmetic' ? 'Aritmética' : 'Cálculo'}">
-  <div class="subnav-container">
-    <ul class="subnav-list" role="list">
-      {#each navLinks as link (link.path)}
-        <li class="subnav-item">
-          <a
-            class="subnav-link"
-            href={link.path}
-            aria-current={link.ariaCurrent ? 'page' : undefined}
-            on:click|preventDefault={() => navigateTo(link.path)}
-          >
-            {link.label}
-          </a>
-        </li>
-      {/each}
-    </ul>
+<nav class="page-subnav" aria-label="Sections of {gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'}" data-component="SubNav">
+  <div class="subnav-box">
+    <div class="subnav-content">
+      <ul class="subnav-list" role="list" aria-label="Available sections list">
+        {#each navLinks as link (link.path)}
+          <li class="subnav-item" role="listitem">
+            <a
+              class="subnav-link"
+              href={link.path}
+              aria-current={link.ariaCurrent ? 'page' : undefined}
+              aria-label="Go to {link.label} of {gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'}"
+              title="{link.label} - {gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'} Section"
+              data-section={link.label.toLowerCase()}
+              on:click|preventDefault={() => navigateTo(link.path)}
+            >
+              {link.label}
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </div>
   </div>
 </nav>
 
 <style>
-  .subnav {
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
+  .page-subnav {
+    /* Same as .page-header */
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem);
+    box-sizing: border-box;
     position: sticky;
     top: 0;
-    z-index: 2;
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,.02);
+    z-index: 10;
+    overflow-x: hidden;
   }
 
-  .subnav-container {
-    width: 100vw;
-    max-width: 100vw;
-    margin: 0;
+  .subnav-box {
+    /* Same as .header-box */
+    height: 100%;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: transparent;
+    backdrop-filter: blur(4px);
+  }
+
+  .subnav-content {
+    /* Navigation content wrapper */
+    width: 100%;
     padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 4vw, 1rem);
     box-sizing: border-box;
-    border: 1px solid rgba(255,255,255,.05);
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-    background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    backdrop-filter: blur(4px);
   }
 
   .subnav-list {
@@ -113,7 +129,7 @@
 
   /* Breakpoints altamente responsivos */
   @media (max-width: 768px) {
-    .subnav-container {
+    .subnav-content {
       padding: 0.5rem 0.75rem;
     }
 
@@ -144,9 +160,8 @@
   }
 
   @media (max-width: 480px) {
-    .subnav-container {
+    .subnav-content {
       padding: 0.4rem 0.5rem;
-      border-radius: 10px;
     }
 
     .subnav-link {
@@ -172,11 +187,6 @@
 
   /* Dark mode enhancements */
   @media (prefers-color-scheme: dark) {
-    .subnav {
-      background: rgba(0,0,0,.02);
-      border-color: rgba(255,255,255,.03);
-    }
-
     .subnav-link {
       background: rgba(255,255,255,.05);
       border-color: rgba(255,255,255,.1);

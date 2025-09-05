@@ -1,5 +1,5 @@
 <div class="about-page">
-  <h2>About The Math Games</h2>
+  <h2>About MathRaining</h2>
   <p>
     This Math Trainer was created with a simple philosophy: provide a clean, fast, and effective learning tool without any of the usual annoyances of the modern web.
   </p>
