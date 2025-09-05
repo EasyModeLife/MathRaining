@@ -29,32 +29,31 @@
 
 <style>
   .page-header {
-    height: clamp(56px, var(--header-pct), 84px);
+    height: var(--header-pct);
     background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,0));
     border-bottom: 1px solid rgba(255,255,255,.05);
     display: flex;
     align-items: center;
-    padding: .4rem .5rem;
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem);
     box-sizing: border-box;
     position: relative;
     z-index: 10;
+    min-height: 56px;
   }
 
   .header-box {
     height: 100%;
-    width: 100vw;
-    max-width: 100vw;
-    margin: 0;
+    width: calc(100vw - 1.5rem);
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: clamp(0.5rem, 2vw, 0.75rem);
+    gap: clamp(0.5rem, 3vw, 1rem);
     box-sizing: border-box;
-    padding: .5rem .75rem;
+    padding: clamp(0.5rem, 1vw, 0.75rem);
     border: 1px solid var(--border);
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
+    border-radius: 12px;
     background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     backdrop-filter: blur(4px);
   }

@@ -39,14 +39,16 @@
     border-top: 1px solid rgba(255,255,255,.03);
     backdrop-filter: blur(6px);
     box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .footer-box {
-    width: 100%;
-    max-width: 100%;
-    padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 5vw, 2rem);
+    width: calc(100vw - 2rem);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(1rem, 4vw, 2rem) clamp(1.5rem, 6vw, 3rem);
     display: grid;
-    gap: clamp(1rem, 3vh, 2rem);
+    gap: clamp(1.5rem, 4vh, 3rem);
     justify-items: center;
     box-sizing: border-box;
   }
@@ -86,14 +88,14 @@
 
   .foot-text {
     margin: 0;
-    font-size: clamp(0.75rem, 2vw, 0.9rem);
-    opacity: 0.85;
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    opacity: 0.9;
     text-align: center;
-    padding: 0 clamp(0.25rem, 2vw, 1rem);
-    line-height: 1.4;
-    max-width: 100%;
-    word-wrap: break-word;
-    hyphens: auto;
+    padding: 0 clamp(1rem, 5vw, 2rem);
+    line-height: 1.6;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   /* Breakpoints responsivos mejorados */
@@ -132,7 +134,7 @@
   }
 
   @media (max-width: 420px) {
-    .fact-text {
+    .foot-text {
       font-size: 0.75rem;
       padding: 0 0.2rem;
       line-height: 1.6;
