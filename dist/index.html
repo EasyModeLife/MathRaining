@@ -1,12 +1,21 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Free Math Trainer (Svelte)</title>
-  <meta name="description" content="Entrenador de matemáticas rápido" />
-  <script type="module" crossorigin src="/assets/index-J70BqvgS.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DwIJ3Pxs.css">
+  <title>The Math Games (Svelte)</title>
+  <meta name="description" content="Fast, ad-free math trainer" />
+  <base href="/" />
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-B4eN53tJ.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-N-EQm9D2.css">
 </head>
 <body>
   <div id="app"></div>

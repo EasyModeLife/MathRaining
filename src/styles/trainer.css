@@ -10,6 +10,9 @@
   background: linear-gradient(155deg, var(--bg) 0%, var(--surface-alt) 70%);
   color: var(--text);
   overflow: hidden;
+  /* Habilita container queries y tipografía fluida base */
+  container-type: size;
+  font-size: clamp(14px, 1.8vmin, 18px);
 }
 
 .app-frame {
@@ -30,7 +33,9 @@
 }
 
 .main-title {
-  font-size: 1.5rem;
+  /* Fallback + override con cqi */
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  font-size: clamp(1.2rem, 3.5cqi, 1.8rem);
   margin: 0 0 1rem 0;
   letter-spacing: .5px;
 }
@@ -82,7 +87,9 @@
   border: 2px solid var(--input-border);
   background: linear-gradient(165deg, var(--surface) 0%, var(--surface-alt) 100%);
   color: var(--text);
-  font-size: clamp(2rem, 10vw, 4rem);
+  /* Fallback + override con cqi para adaptarse al ancho del contenedor */
+  font-size: clamp(1.8rem, 8vw, 3.6rem);
+  font-size: clamp(1.8rem, 7cqi, 3.6rem);
   font-weight: 600;
   width: 100%;
   box-sizing: border-box;
@@ -107,7 +114,9 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  font-size: .75rem;
+  /* Fallback + override con cqi */
+  font-size: clamp(.70rem, 2.4vw, .9rem);
+  font-size: clamp(.70rem, 1.8cqi, .9rem);
   opacity: .6;
   letter-spacing: .5px;
   justify-content: space-between;
@@ -129,7 +138,9 @@
 }
 
 .problem-text {
-  font-size: clamp(2.5rem, 15vw, 6rem);
+  /* Fallback + override con cqi para no desbordar */
+  font-size: clamp(2rem, 10vw, 5rem);
+  font-size: clamp(2rem, 9cqi, 5rem);
   font-weight: 700;
   letter-spacing: 3px;
   transition: transform .2s, opacity .2s;
@@ -152,7 +163,8 @@
   }
 
   .main-title {
-    font-size: 2rem;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.4rem, 2.6cqi, 2rem);
   }
 
   .trainer-grid {
@@ -160,11 +172,13 @@
   }
 
   .problem-text {
-    font-size: clamp(4rem, 10vw, 8rem);
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-size: clamp(3rem, 7.5cqi, 6.5rem);
   }
 
   .answer-input {
-    font-size: clamp(3rem, 10vw, 6rem);
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-size: clamp(2.4rem, 6.5cqi, 5rem);
     padding: 1.5rem 2rem;
   }
 }

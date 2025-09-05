@@ -2,6 +2,10 @@
   import LevelProgress from '../games/arithmetic/components/LevelProgress.svelte';
   import ProblemDisplay from '../games/arithmetic/components/ProblemDisplay.svelte';
   import '../games/arithmetic/styles/trainer.css';
+  import GameBox from './GameBox.svelte';
+  // Render condicional de slots
+  // @ts-ignore - $$slots es inyectado por Svelte
+  const hasImage = !!$$slots?.image;
 
   // Props comunes
   export let title: string = '';
@@ -41,29 +45,53 @@
       />
     </header>
     <main class="app-main">
-      <div class="trainer-grid">
-        <ProblemDisplay
-          {question}
-          {flash}
-          penalty={penalty}
-          overlayLabel={overlayLabel}
-          overlayColor={overlayColor}
-          overlayTrigger={overlayTrigger}
-        />
-        <input
-          class="answer-input"
-          bind:this={inputEl}
-          bind:value={input}
-          on:input={handleInput}
-          on:keydown={handleInputKey}
-          autocomplete="off"
-          inputmode="text"
-          aria-label="Answer"
-        />
-        <div class="footer-stats">
-          <slot name="footer-left"></slot>
-          <slot name="footer-right"></slot>
-        </div>
+      <div class="trainer-grid grid-modular">
+        <!-- Caja de problema -->
+        <slot name="problem">
+          <GameBox area="problem">
+            <ProblemDisplay
+              {question}
+              {flash}
+              penalty={penalty}
+              overlayLabel={overlayLabel}
+              overlayColor={overlayColor}
+              overlayTrigger={overlayTrigger}
+            />
+          </GameBox>
+        </slot>
+
+        <!-- Caja de imagen opcional -->
+        {#if hasImage}
+          <GameBox area="image">
+            <slot name="image"></slot>
+          </GameBox>
+        {/if}
+
+        <!-- Caja de respuesta -->
+        <slot name="answer">
+          <GameBox area="answer">
+            <input
+              class="answer-input"
+              bind:this={inputEl}
+              bind:value={input}
+              on:input={handleInput}
+              on:keydown={handleInputKey}
+              autocomplete="off"
+              inputmode="text"
+              aria-label="Answer"
+            />
+          </GameBox>
+        </slot>
+
+        <!-- Caja de pie -->
+        <GameBox area="footer">
+          <slot name="footer">
+            <div class="footer-stats">
+              <slot name="footer-left"></slot>
+              <slot name="footer-right"></slot>
+            </div>
+          </slot>
+        </GameBox>
       </div>
     </main>
   </div>
@@ -72,4 +100,20 @@
 
 <style>
   .header-left { display:flex; align-items:center; gap:.5rem; }
+  .grid-modular{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto auto;
+    gap: 1rem;
+  }
+  @media (min-width: 700px){
+    .grid-modular{
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto auto;
+    }
+    :global([data-area="problem"]) { grid-column: 1 / -1; }
+    :global([data-area="image"]) { grid-column: 2; }
+    :global([data-area="answer"]) { grid-column: 1 / -1; }
+  :global([data-area="footer"]) { grid-column: 1 / -1; }
+  }
 </style>
