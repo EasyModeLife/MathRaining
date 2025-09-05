@@ -51,5 +51,18 @@
   --focus: #4da3ff;
 }
 
+/* Theme: Pink Purple */
+:root[data-theme="pink-purple"] {
+  --bg: #1a0a1e; /* dark purple background */
+  --surface: #3d1c51; /* medium purple surface */
+  --surface-alt: #2a1038; /* darker purple surface */
+  --border: #5d2a7d; /* light purple border */
+  --text: #fce4ff; /* light pink text */
+  --bar-bg: #2a1038; /* dark purple bar */
+  --input-bg: #3d1c51; /* purple input background */
+  --input-border: #8b4da6; /* medium light purple border */
+  --focus: #ff6bd6; /* bright pink focus */
+}
+
 body { margin:0; font-family: system-ui, Arial, sans-serif; background: var(--bg); color: var(--text); }
 button { font-family: inherit; }

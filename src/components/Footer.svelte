@@ -1,7 +1,7 @@
 <script lang="ts">
   import { navigate } from '../router';
 
-  export let FOOTER_PCT: number = 5;
+  export let FOOTER_PCT: number = 3;
 
   function goHome() {
     navigate('/');

@@ -37,7 +37,7 @@
 
   // Tamaños porcentuales para header/main/footer
   const HEADER_PCT = 12; // % de la página
-  const FOOTER_PCT = 8;  // % de la página
+  const FOOTER_PCT = 5;  // % de la página
 </script>
 
 <div class="page" style={`--header:${HEADER_PCT}%;--header-pct:${HEADER_PCT}%;--footer:${FOOTER_PCT}%`}>
