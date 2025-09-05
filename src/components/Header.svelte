@@ -39,11 +39,13 @@
     position: relative;
     z-index: 10;
     min-height: 56px;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .header-box {
     height: 100%;
-    width: calc(100vw - 1.5rem);
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     display: grid;

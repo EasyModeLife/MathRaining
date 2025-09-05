@@ -32,18 +32,17 @@
 <style>
   .page-footer {
     height: var(--footer, 8%);
-    width: 100vw;
+    width: 100%;
     display: grid;
     place-items: center;
     background: linear-gradient(0deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.02) 100%);
     border-top: 1px solid rgba(255,255,255,.03);
     backdrop-filter: blur(6px);
     box-sizing: border-box;
-    overflow-x: hidden;
   }
 
   .footer-box {
-    width: calc(100vw - 2rem);
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: clamp(1rem, 4vw, 2rem) clamp(1.5rem, 6vw, 3rem);
