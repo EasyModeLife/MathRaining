@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "npm run build && wrangler pages deploy dist"
+  "deploy": "npm run build && npx wrangler pages deploy dist --project-name mathraining --branch main"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",

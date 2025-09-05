@@ -1,4 +1,4 @@
-# robots.txt for RainingMath
+# robots.txt for MathRaining
 # Allow all crawlers to access the site
 User-agent: *
 Allow: /
