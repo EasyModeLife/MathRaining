@@ -29,12 +29,12 @@
     display: grid;
     grid-template-rows: 1fr auto;
     width: 100%;
-    max-width: 520px;
+    max-width: 100%;
     /* Altura acotada y responsiva */
     min-height: clamp(180px, 28vh, 320px);
     max-height: clamp(220px, 36vh, 420px);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: clamp(8px, 3vw, 16px);
     background: linear-gradient(155deg, var(--surface) 0%, var(--surface-alt) 80%);
     color: var(--text);
     box-shadow: 0 10px 40px -12px rgba(0,0,0,.4);
@@ -46,6 +46,7 @@
     padding: 0;
     text-align: left;
     position: relative;
+    box-sizing: border-box;
   }
 
   .game-card:focus-visible {

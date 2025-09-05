@@ -153,25 +153,25 @@
 <style>
   .page-main {
     position: relative;
+    width: 100vw;
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
     display: grid;
     grid-template-rows: 1fr;
+    box-sizing: border-box;
   }
-
-
 
   /* Vista Home: grilla de tarjetas dentro del 100% de main */
   .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 25vw, 320px), 1fr));
-    gap: clamp(0.75rem, 3vw, 1.5rem);
-    padding: clamp(1rem, 4vw, 2rem) clamp(2rem, 6vw, 3rem);
+    gap: clamp(1rem, 4vw, 2rem);
+    padding: clamp(1.5rem, 6vw, 3rem) clamp(2rem, 8vw, 4rem);
     height: 100%;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
     box-sizing: border-box;
     place-items: stretch;
     justify-content: center;

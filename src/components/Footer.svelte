@@ -32,20 +32,21 @@
 <style>
   .page-footer {
     height: var(--footer, 8%);
+    width: 100vw;
     display: grid;
     place-items: center;
     background: linear-gradient(0deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.02) 100%);
     border-top: 1px solid rgba(255,255,255,.03);
     backdrop-filter: blur(6px);
+    box-sizing: border-box;
   }
 
   .footer-box {
     width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 4vw, 2rem);
+    max-width: 100%;
+    padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 5vw, 2rem);
     display: grid;
-    gap: clamp(0.5rem, 2vh, 1rem);
+    gap: clamp(1rem, 3vh, 2rem);
     justify-items: center;
     box-sizing: border-box;
   }

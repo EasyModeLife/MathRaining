@@ -42,17 +42,19 @@
 
   .header-box {
     height: 100%;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: .75rem;
+    gap: clamp(0.5rem, 2vw, 0.75rem);
     box-sizing: border-box;
     padding: .5rem .75rem;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
     background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     backdrop-filter: blur(4px);
   }

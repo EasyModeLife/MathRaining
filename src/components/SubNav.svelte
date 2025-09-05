@@ -46,12 +46,15 @@
   }
 
   .subnav-container {
-    max-width: 1100px;
-    margin: 0 auto;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
     padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 4vw, 1rem);
     box-sizing: border-box;
     border: 1px solid rgba(255,255,255,.05);
-    border-radius: 14px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
     background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
     backdrop-filter: blur(4px);
   }
