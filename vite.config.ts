@@ -12,6 +12,7 @@ const devCompression = () => ({
 });
 
 export default defineConfig({
+  base: '/',
   plugins: [
     svelte(),
     viteCompression({ algorithm: 'gzip', ext: '.gz', threshold: 1024 }),
