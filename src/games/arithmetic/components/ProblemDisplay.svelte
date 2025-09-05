@@ -12,16 +12,19 @@
   // Ajuste automático de tamaño para que la expresión quepa en la caja
   let containerEl: HTMLDivElement;
   let fitboxEl: HTMLDivElement;
-  let scale = 1; // escala aplicada a la expresión
+  // Autoajuste vía font-size (px)
+  const BASE_PX = 64;
+  const MIN_PX = 18;
+  const MAX_PX = 120;
+  let fontPx = BASE_PX;
   let renderExpr = '';
   let usedMultiline = false;
   let lastQuestion = '';
   let fitQueued = false;
   let isFitting = false;
 
-  // Divide en N líneas (2..6) en operadores + y - a nivel superior (fuera de llaves),
-  // preservando el operador al inicio de la línea siguiente, y usa aligned con &.
-  function breakIntoNLines(latex: string, lines: number): string | null {
+  // Separa en N líneas (2..6) por + y - a nivel superior (fuera de llaves)
+  function splitTopLevelByPlusMinus(latex: string, lines: number): string[] | null {
     if (lines < 2) return null;
     const ops: number[] = [];
     let depth = 0;
@@ -33,8 +36,7 @@
       if (ch === '{') { depth++; continue; }
       if (ch === '}') { depth = Math.max(0, depth - 1); continue; }
       if (depth === 0 && (ch === '+' || ch === '-')) {
-        // evita primer signo si es unario al inicio
-        if (i === 0) continue;
+        if (i === 0) continue; // signo unario al inicio
         ops.push(i);
       }
     }
@@ -51,18 +53,135 @@
     let start = 0;
     for (const cut of cuts) {
       const head = latex.slice(start, cut).trim();
-      const op = latex[cut];
       if (head) parts.push(head);
-      start = cut; // el operador irá al inicio de la siguiente línea
-      // Para que la siguiente línea inicie con el operador, no lo incluimos en head
-      latex = latex.slice(0, cut) + ' ' + latex.slice(cut); // asegura espacio antes del operador
+      start = cut; // operador se conserva al inicio del siguiente
     }
     const tail = latex.slice(start).trim();
     if (tail) parts.push(tail);
-    // Construir aligned con un & al principio de cada fila
-    const body = parts.map(p => ` & ${p.trim()}`).join(' \\\n');
-    return `\\begin{aligned}\n${body}\n\\end{aligned}`;
+    return parts;
   }
+
+  // Envuelve filas en un array de una columna con separadores de línea correctos (\\)
+  function arrayOfRows(rows: string[]): string {
+    const body = rows.map(r => r.trim()).filter(Boolean).join(' \\\\ ');
+    return `\\begin{array}{l}\n${body}\n\\end{array}`;
+  }
+
+  // Construye multilínea sin delimitadores externos
+  function breakIntoNLines(latex: string, lines: number): string | null {
+    const rows = splitTopLevelByPlusMinus(latex, lines);
+    if (!rows || rows.length < 2) return null;
+    return arrayOfRows(rows);
+  }
+
+  // Encuentra el primer par \left ... \right (anidamiento soportado) y devuelve cortes
+  function findFirstLeftRight(latex: string): null | {
+    pre: string; inside: string; post: string; leftTok: string; rightTok: string;
+  } {
+    const L = latex.length;
+    const matchWord = (s:string, i:number, w:string)=> s.slice(i, i+w.length)===w;
+    const readDelimToken = (s:string, i:number): { tok:string, end:number } => {
+      // i apunta al primer char del delimitador tras \left o \right (saltando espacios antes)
+      let j = i;
+      while (j < s.length && /\s/.test(s[j])) j++;
+      if (j>=s.length) return { tok:'', end:j };
+      if (s[j] === '\\') {
+        // comando: \\{  ó \\langle, \\vert, etc.
+        let k = j+1;
+        if (k < s.length && !/[A-Za-z]/.test(s[k])) {
+          // símbolo de un char como { } .
+          return { tok: s.slice(j, k+1), end: k+1 };
+        }
+        while (k < s.length && /[A-Za-z]/.test(s[k])) k++;
+        return { tok: s.slice(j, k), end: k };
+      } else {
+        // un solo char: ( [ ] ) | . etc
+        return { tok: s[j], end: j+1 };
+      }
+    };
+
+    // buscar \left
+    let i = 0; let depthBraces = 0; let startLeft = -1; let afterLeftDelim = -1; let leftTok = '';
+    while (i < L) {
+      const ch = latex[i];
+      if (ch === '\\') { i += 2; continue; }
+      if (ch === '{') { depthBraces++; i++; continue; }
+      if (ch === '}') { depthBraces = Math.max(0, depthBraces-1); i++; continue; }
+      if (depthBraces===0 && matchWord(latex, i, '\\left')) {
+        // leer delimitador
+        let j = i + '\\left'.length;
+        const d = readDelimToken(latex, j);
+        startLeft = i; afterLeftDelim = d.end; leftTok = latex.slice(j, d.end);
+        break;
+      }
+      i++;
+    }
+    if (startLeft === -1) return null;
+    // buscar \right emparejado con anidamiento de \left/\right
+    let depthLR = 1; let k = afterLeftDelim;
+    while (k < L) {
+      if (matchWord(latex, k, '\\left')) {
+        depthLR++; k += '\\left'.length; continue;
+      }
+      if (matchWord(latex, k, '\\right')) {
+        depthLR--; if (depthLR === 0) break; k += '\\right'.length; continue;
+      }
+      k++;
+    }
+    if (k >= L) return null;
+    // k apunta a \\right. Capturar token de cierre
+    const rightWordLen = '\\right'.length;
+    const rightDel = readDelimToken(latex, k + rightWordLen);
+    const pre = latex.slice(0, startLeft);
+    const inside = latex.slice(afterLeftDelim, k);
+    const post = latex.slice(rightDel.end);
+    const rightTok = latex.slice(k + rightWordLen, rightDel.end);
+    return { pre, inside, post, leftTok, rightTok };
+  }
+
+  // Inserta multilínea (array{l}) dentro del primer par \left...\right o en paréntesis toplevel
+  function multilineInsideDelims(latex: string, lines: number): string | null {
+    const found = findFirstLeftRight(latex);
+    if (found) {
+      const rows = splitTopLevelByPlusMinus(found.inside, lines);
+      if (rows && rows.length >= 2) {
+        const arr = arrayOfRows(rows);
+        return `${found.pre}\\left${found.leftTok} ${arr} \\right${found.rightTok}${found.post}`;
+      }
+    }
+    // Fallback: paréntesis toplevel simples
+    let depth=0, start=-1, end=-1;
+    for (let i=0;i<latex.length;i++){
+      const ch = latex[i];
+      if (ch==='\\') { i++; continue; }
+      if (ch==='{' ) depth++;
+      else if (ch==='}') depth=Math.max(0,depth-1);
+      else if (ch==='(' && depth===0 && start===-1) start=i;
+    }
+    if (start!==-1){
+      depth=0;
+      for (let i=latex.length-1;i>start;i--){
+        const ch = latex[i];
+        if (ch==='\\') { i--; continue; }
+        if (ch==='}') depth++;
+        else if (ch==='{' ) depth=Math.max(0,depth-1);
+        else if (ch===')' && depth===0) { end=i; break; }
+      }
+      if (end!==-1){
+        const pre = latex.slice(0, start);
+        const inside = latex.slice(start+1, end);
+        const post = latex.slice(end+1);
+        const rows = splitTopLevelByPlusMinus(inside, lines);
+        if (rows && rows.length>=2){
+          const arr = arrayOfRows(rows);
+          return `${pre}( ${arr} )${post}`;
+        }
+      }
+    }
+    return null;
+  }
+
+  function measureRect(el: HTMLElement){ return el.getBoundingClientRect(); }
 
   async function fit() {
     if (isFitting) return; // evita reentradas
@@ -72,36 +191,44 @@
       usedMultiline = false;
       lastQuestion = question;
     }
-    await tick(); // esperar a que KaTeX renderice
+    // construir candidatos (1..6 líneas)
+    const candidates: { expr:string, lines:number }[] = [{ expr: question, lines: 1 }];
+    const hasDelims = /\\left|\\right/.test(question);
+    for (let n = 2; n <= 6; n++) {
+      // Si hay delimitadores, solo anidar dentro de ellos
+      if (hasDelims) {
+        const inside = multilineInsideDelims(question, n);
+        if (inside) candidates.push({ expr: inside, lines: n });
+        continue;
+      }
+      const inside = multilineInsideDelims(question, n);
+      if (inside) { candidates.push({ expr: inside, lines: n }); continue; }
+      const b = breakIntoNLines(question, n);
+      if (b) candidates.push({ expr: b, lines: n });
+    }
+
+    await tick(); // esperar inicial
     if (!containerEl || !fitboxEl) return;
 
-  const maxWidth = containerEl.clientWidth - 48; // margen extra amplio para delimitadores grandes
-  const maxHeight = containerEl.clientHeight - 16;
-    const measure = () => fitboxEl.getBoundingClientRect();
-    let rect = measure();
-    if (rect.width === 0 || rect.height === 0) return;
-    // Medir dimensiones no escaladas (rect ya incluye la escala actual)
-    const unscaledW = rect.width / (scale || 1);
-    const unscaledH = rect.height / (scale || 1);
-  let s = Math.min(maxWidth / unscaledW, maxHeight / unscaledH, 1) * 0.96; // fudge mayor para evitar cortes
+    const maxWidth = containerEl.clientWidth - 48; // margen extra para delimitadores
+    const maxHeight = containerEl.clientHeight - 16;
 
-    // Si la escala requerida es demasiado pequeña, probamos N líneas (2..4)
-    if (s < 0.78) {
-      for (let lines = 2; lines <= 4 && s < 0.88; lines++) {
-        const broken = breakIntoNLines(question, lines);
-        if (!broken) break;
-        renderExpr = broken; usedMultiline = true;
-        await tick(); rect = measure();
-        const unW = rect.width / (scale || 1);
-        const unH = rect.height / (scale || 1);
-        s = Math.min(maxWidth / unW, maxHeight / unH, 1) * 0.96;
-      }
+    let best = { expr: question, size: MIN_PX, lines:1 };
+
+    for (const cand of candidates) {
+      renderExpr = cand.expr; usedMultiline = cand.lines > 1;
+      fontPx = BASE_PX; // medir a base
+      await tick();
+      const rect = measureRect(fitboxEl);
+      if (rect.width === 0 || rect.height === 0) continue;
+      const s = Math.min(maxWidth / rect.width, maxHeight / rect.height);
+      const size = Math.max(MIN_PX, Math.min(MAX_PX, Math.floor(s * BASE_PX * 0.96)));
+      if (size > best.size) best = { expr: cand.expr, size, lines: cand.lines };
     }
-    // Redondeo suave para evitar jitter
-  const nextScale = Math.max(0.4, Math.min(1, Number(s.toFixed(3))));
-    if (Math.abs(nextScale - scale) > 0.001) {
-      scale = nextScale;
-    }
+
+    // aplicar mejor opción
+    if (renderExpr !== best.expr) renderExpr = best.expr;
+    if (Math.abs(fontPx - best.size) > 0.5) fontPx = best.size;
     isFitting = false;
   }
 
@@ -155,7 +282,7 @@
     bind:this={containerEl}
     aria-live="polite" role="heading" aria-level="1"
   >
-    <div class="fitbox" bind:this={fitboxEl} style={`--scale:${scale}`}> 
+  <div class="fitbox" bind:this={fitboxEl} style={`--fsize:${fontPx}px`}> 
       <MathRenderer expr={renderExpr || question} display={true} on:rendered={() => scheduleFit()} />
     </div>
   </div>
@@ -181,17 +308,14 @@
   }
   .fitbox { 
     display:inline-block;
-    transform: scale(var(--scale, 1));
-    transform-origin: center center;
-    /* Evitar cortes de KaTeX al escalar */
-    will-change: transform;
+    font-size: var(--fsize, 64px);
     max-width: 100%;
-    line-height: 1.1;
-  padding-inline: .25em; /* amortiguador para brackets grandes */
-  max-height: 100%;
-     overflow: hidden; /* evitamos scroll visible, forzamos ajuste */
-     white-space: normal; /* permite envoltura en KaTeX cuando hay espacios */
-   }
+    line-height: 1.12;
+    padding-inline: .25em; /* amortiguador para brackets grandes */
+    max-height: 100%;
+    overflow: hidden; /* evitamos scroll visible, forzamos ajuste */
+    white-space: normal; /* permite envoltura en KaTeX si hay espacios */
+  }
   
   .judgement { position:absolute; top:.55rem; left:.8rem; font-size:clamp(1.4rem,4.4vw,3.2rem); font-weight:800; letter-spacing:3px; color:var(--judge-color, var(--text)); opacity:.18; pointer-events:none; text-shadow:0 2px 12px rgba(0,0,0,.55); animation:judgeburst .95s ease-out forwards; mix-blend-mode:screen; }
   .judgement.multi { background:linear-gradient(90deg,#FF715B,#F9CB40,#BCED09,#2F52E0,#FF715B); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:400% 100%; animation:judgeburst .95s ease-out forwards, hue 2.2s linear infinite; }
