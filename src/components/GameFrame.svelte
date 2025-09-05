@@ -27,6 +27,7 @@
   export let inputEl: HTMLInputElement | null = null;
   export let handleInput: (e: Event) => void;
   export let handleInputKey: (e: KeyboardEvent) => void;
+  export let disabled: boolean = false;
 </script>
 
 <div class="trainer-layout">
@@ -34,7 +35,6 @@
     <header class="app-header">
       <div class="header-left">
         <slot name="header-left"></slot>
-        <h1 class="main-title">{title}</h1>
       </div>
       <LevelProgress
         {levelId}
@@ -76,6 +76,7 @@
               bind:value={input}
               on:input={handleInput}
               on:keydown={handleInputKey}
+              {disabled}
               autocomplete="off"
               inputmode="text"
               aria-label="Answer"

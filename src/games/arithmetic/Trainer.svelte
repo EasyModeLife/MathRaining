@@ -40,7 +40,15 @@
     if(ms<8000) return {label:'bad', color:'#F9CB40'};
     return {label:'miss', color:'#FF715B'};
   }
-  function rand(min:number,max:number){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function rand(min:number,max:number){
+    if (globalThis.crypto) {
+      const array = new Uint32Array(1);
+      globalThis.crypto.getRandomValues(array);
+      const cryptoRand = array[0] / (2**32 - 1);
+      return Math.floor(cryptoRand * (max - min + 1)) + min;
+    }
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
   function randMultiple(min:number, max:number, factor:number){
     if(factor<=1) return rand(Math.max(1, min), max);
     const start = Math.max(1, Math.ceil(min / factor));
@@ -58,37 +66,51 @@
     if(magnitude >= 50) base += 1500;
     return base;
   }
+  // Evitar problemas triviales: suma con 0, resta a-a, multiplicación por 0/1, división por 0/1 o a/a
+  function isTrivial(op:string, a:number, b:number){
+    if(op === '+') return a === 0 || b === 0;
+    if(op === '-') return a === b; // restar mismo número
+    if(op === 'x') return a === 0 || b === 0 || a === 1 || b === 1;
+    if(op === '/') return b === 0 || b === 1 || a === b; // dividir por 0/1 o a/a
+    return false;
+  }
   function gen():Exercise {
     const op: import('./levels').Op = level.ops[Math.floor(Math.random()*level.ops.length)];
     const hasMultiples = Array.isArray(level.multiples) && level.multiples!.length>0;
     const m = hasMultiples ? level.multiples![Math.floor(Math.random()*level.multiples!.length)] : 1;
 
     let a:number = level.min, b:number = level.min;
-    if(op === '+'){
-      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-    } else if(op === '-'){
-      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-    } else if(op === 'x'){
-      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+    const MAX_ATTEMPTS = 60;
+    if(op === '+' || op === '-' || op === 'x'){
+      let attempts = 0;
+      do{
+        a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+        b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+        attempts++;
+      }while(isTrivial(op, a, b) && attempts < MAX_ATTEMPTS);
+      // if still trivial after attempts, accept and continue to avoid infinite loop
     } else { // '/'
-      // Ensure exact division with operands within range and a <= max, and avoid zeros
+      // Ensure exact division with operands within range and a <= max, and avoid zeros/trivials
       let attempts = 0; let found=false; let r:number = 1;
-      while(attempts++ < 20 && !found){
+      while(attempts++ < MAX_ATTEMPTS && !found){
         // Prefer result r >= 1
         r = hasMultiples ? Math.max(1, randMultiple(1, Math.max(1, level.max), m)) : Math.max(1, randNonZero(1, Math.max(1, level.max)));
         const maxB = Math.min(level.max, Math.floor(level.max / r));
         if(maxB < 1){ continue; }
         b = hasMultiples ? Math.max(1, randMultiple(1, maxB, m)) : randNonZero(1, maxB);
         a = r * b;
-        if(a >= 1 && a <= level.max){ found = true; }
+        if(a >= 1 && a <= level.max && !isTrivial('/', a, b)){
+          found = true;
+        }
       }
-      if(!found){ // fallback simple exact division similar to previous
-        b = Math.max(1, randNonZero(level.min, level.max));
-        r = Math.max(1, randNonZero(level.min, level.max));
-        a = r * b;
+      if(!found){ // fallback: try simple non-trivial pair
+        let attempts2 = 0;
+        do{
+          b = Math.max(1, randNonZero(level.min, level.max));
+          r = Math.max(1, randNonZero(level.min, level.max));
+          a = r * b;
+          attempts2++;
+        }while(isTrivial('/', a, b) && attempts2 < MAX_ATTEMPTS);
       }
     }
   const answer = op==='+'?a+b: op==='-'?a-b: op==='x'?a*b: a/b;
@@ -171,6 +193,7 @@
   onDestroy(()=>{ window.removeEventListener('keydown', handleGlobalKey); cancelAnimationFrame(raf); });
 </script>
 
+{#key current.id}
 <GameFrame
   title="MathRaining"
   levelId={level.id}
@@ -192,3 +215,4 @@
   <span slot="footer-left"><MathRenderer expr={`\\displaystyle \\text{Time: } ${((performance.now()-start)/1000).toFixed(1)}\\,\\text{s}`}/></span>
   <span slot="footer-right"><MathRenderer expr={`\\text{Range: } ${level.min}\\text{--}${level.max}\\quad \\text{Ops: } ${level.ops.join('\\,')}`}/></span>
 </GameFrame>
+{/key}

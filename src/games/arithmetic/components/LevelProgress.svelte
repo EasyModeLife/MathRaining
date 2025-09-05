@@ -7,7 +7,7 @@
   export let remainingSeconds: number;
   const palette = ['#2F52E0','#BCED09','#F9CB40','#FF715B','#4C5B5C'];
   function levelColor(l:number){ return palette[l % palette.length]; }
-  $: levelExpr = `\\text{Level } ${levelId}`;
+  $: levelExpr = `\\text{Level } ${levelId} \\text{ • Timer: } ${remainingSeconds.toFixed(1)}\\,\\text{s}`;
   $: timeExpr = `\\displaystyle ${remainingSeconds.toFixed(1)}\\,\\text{s}`;
   $: countExpr = `\\displaystyle \\frac{${Math.max(0, correct)}}{${total}}`;
 </script>

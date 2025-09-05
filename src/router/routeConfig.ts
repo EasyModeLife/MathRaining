@@ -37,7 +37,7 @@ export const ROUTES: RouteConfig[] = [
   },
   {
     path: '/arithmetic/instructions',
-    component: () => import('../pages/LearningPage.svelte'),
+    component: () => import('../pages/InstructionsPage.svelte'),
     title: 'MathRaining - Arithmetic Instructions',
     meta: { gameType: 'arithmetic', mode: 'instructions' }
   },
@@ -67,7 +67,7 @@ export const ROUTES: RouteConfig[] = [
   },
   {
     path: '/calculus/instructions',
-    component: () => import('../pages/LearningPage.svelte'),
+    component: () => import('../pages/InstructionsPage.svelte'),
     title: 'MathRaining - Calculus Instructions',
     meta: { gameType: 'calculus', mode: 'instructions' }
   },

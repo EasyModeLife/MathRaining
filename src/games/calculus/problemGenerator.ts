@@ -9,6 +9,12 @@ export interface Exercise {
 export type CalcTopic = 'derivative-poly' | 'integral-poly' | 'derivative-trig' | 'differential-poly';
 
 export function rand(min: number, max: number): number {
+  if (globalThis.crypto) {
+    const array = new Uint32Array(1);
+    globalThis.crypto.getRandomValues(array);
+    const cryptoRand = array[0] / (2**32 - 1);
+    return Math.floor(cryptoRand * (max - min + 1)) + min;
+  }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -85,25 +91,29 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
   const topic = topics[rand(0, topics.length - 1)];
 
   if (topic === 'derivative-poly') {
-    const deg = rand(1, 3);
-    const coeffs = Array.from({ length: deg + 1 }, () => rand(-6, 6));
-    if (coeffs[0] === 0) coeffs[0] = rand(1, 6);
+  const deg = rand(1, 3);
+  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-6, 6));
+  // Ensure leading coefficient is non-zero
+  if (coeffs[0] === 0) coeffs[0] = rand(1, 6);
+  // Avoid trivial polynomial like constant 0
+  if (coeffs.every(c => c === 0)) coeffs = [rand(1, 6), ...coeffs.slice(1)];
     const poly = polyToLaTeX(coeffs);
     const q = `\\frac{d}{dx} [${poly}]`;
     const ans = polyToLaTeX(derivativePoly(coeffs)).replace(/^\+\s?/, '').trim();
-    const id = (globalThis.crypto?.randomUUID?.()) || Math.random().toString(36).slice(2);
+    const id = `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
     return { id, question: q, answer: ans, topic, timeMs: timeFor(topic) };
   }
 
   if (topic === 'integral-poly') {
-    const deg = rand(0, 3);
-    const coeffs = Array.from({ length: deg + 1 }, () => rand(-5, 5));
-    const sumAbs = coeffs.reduce((a, c) => a + Math.abs(c), 0);
-    if (sumAbs === 0) coeffs[deg] = 1;
+  const deg = rand(0, 3);
+  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-5, 5));
+  // Avoid all zeros
+  const sumAbs = coeffs.reduce((a, c) => a + Math.abs(c), 0);
+  if (sumAbs === 0) coeffs = [...coeffs.slice(0, -1), rand(1, 5)];
     const poly = polyToLaTeX(coeffs);
     const q = `\\int (${poly}) \\, dx`;
     const ans = integralPoly(coeffs);
-    return { id: Math.random().toString(36).slice(2), question: q, answer: ans, topic, timeMs: timeFor(topic) };
+    return { id: `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`, question: q, answer: ans, topic, timeMs: timeFor(topic) };
   }
 
   if (topic === 'derivative-trig') {
@@ -111,18 +121,19 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
     const pick = opts[rand(0, opts.length - 1)];
     const q = `\\frac{d}{dx} [${pick}]`;
     const ans = pick === '\\sin x' ? '\\cos x' : pick === '\\cos x' ? '-\\sin x' : '\\sec^{2} x';
-    return { id: Math.random().toString(36).slice(2), question: q, answer: ans, topic, timeMs: timeFor(topic) };
+    return { id: `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`, question: q, answer: ans, topic, timeMs: timeFor(topic) };
   }
 
   // differential-poly
   const deg = rand(1, 3);
-  const coeffs = Array.from({ length: deg + 1 }, () => rand(-5, 5));
+  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-5, 5));
   if (coeffs[0] === 0) coeffs[0] = rand(1, 5);
+  if (coeffs.every(c => c === 0)) coeffs = [rand(1, 5), ...coeffs.slice(1)];
   const fprime = derivativePoly(coeffs);
   const x0 = rand(-4, 4);
   const poly = polyToLaTeX(coeffs);
   const yprime = polyToLaTeX(fprime).replace(/^\+\s?/, '');
   const q = `\\text{If } y = ${poly}, \\text{ find } dy \\text{ at } x = ${x0} \\text{ } (dy = y'(x) \\, dx)`;
   const ans = `dy = (${yprime}) \\, dx, \\quad y'(${x0}) = ${evalPoly(fprime, x0)}`;
-  return { id: Math.random().toString(36).slice(2), question: q, answer: ans, topic: 'differential-poly', timeMs: timeFor(topic) };
+  return { id: `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`, question: q, answer: ans, topic: 'differential-poly', timeMs: timeFor(topic) };
 }

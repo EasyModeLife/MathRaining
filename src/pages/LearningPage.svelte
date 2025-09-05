@@ -4,25 +4,18 @@
 
   // Reactive to path changes
   $: currentPath = $path;
-  $: gameType = currentPath.includes('/arithmetic') ? 'arithmetic' : 'calculus';
-  $: mode = currentPath.includes('/instructions') ? 'instructions' : 'learning';
+  $: gameType = (currentPath.includes('/arithmetic') ? 'arithmetic' : 'calculus') as 'arithmetic' | 'calculus';
 </script>
 
-<section class="learning-host" aria-label="{gameType} {mode}">
+<section class="learning-host" aria-label="{gameType} learning">
   <div class="learning-section">
     <SubNav {currentPath} {gameType} />
     <div class="learning-content">
       <div class="learning-box">
-        <h2>{gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'} {mode === 'instructions' ? 'Instructions' : 'Learning'}</h2>
-        {#if mode === 'instructions'}
-          <p>Get started with {gameType}: {gameType === 'arithmetic'
-            ? 'learn how to play arithmetic games and improve your math skills'
-            : 'understand calculus concepts and practice problem-solving'}.</p>
-        {:else}
-          <p>Review key concepts: {gameType === 'arithmetic'
-            ? 'basic operations, order of operations, mental math tricks'
-            : 'derivatives, integration rules, trigonometric functions'}.</p>
-        {/if}
+        <h2>{gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'} Learning</h2>
+        <p>Review key concepts: {gameType === 'arithmetic'
+          ? 'basic operations, order of operations, mental math tricks'
+          : 'derivatives, integration rules, trigonometric functions'}.</p>
       </div>
     </div>
   </div>

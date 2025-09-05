@@ -17,6 +17,7 @@
   let flash = false;
   let penaltyFlash = false;
   let firstProblemOfLevel = true;
+
   const BASE_QUESTION_TIME = 12000;
   let questionDeadline = 0;
   let remainingMs = BASE_QUESTION_TIME;
@@ -52,17 +53,24 @@
     input = val;
     if(!val) return;
     // Normalización básica para coincidencias simples
-    const norm = (s:string)=> s.replace(/\s+/g,' ').replace(/\s([+\-])/g,' $1').replace(/^\+\s?/,'').trim().toLowerCase();
+    const norm = (s:string)=> s.replace(/\\/g,'').replace(/\^\{(\w+)\}/g,'^$1').replace(/\s+/g,' ').replace(/\s([+\-])/g,' $1').replace(/^\+\s?/,'').trim().toLowerCase();
     if(norm(val) === norm(current.answer)){
       judgementLabel = 'correct'; judgementColor = '#BCED09'; judgementId+=1; flash=true; correct+=1; dispatch('answer',{correct:true});
       const levelComplete = correct >= level.total;
       setTimeout(()=>{
-        if(levelComplete){ const nxt = nextCalcLevel(level.id); if(nxt){ level = nxt; correct = 0; firstProblemOfLevel = true; } }
-        else { firstProblemOfLevel = false; }
-        input=''; flash=false; next();
+        input=''; flash=false;
+        if(levelComplete){
+          const nxt = nextCalcLevel(level.id);
+          if(nxt){ level = nxt; correct = 0; firstProblemOfLevel = true; next(); }
+        } else {
+          firstProblemOfLevel = false;
+          next();
+        }
       }, 200);
     }
   }
+
+
   function handleChange(e:Event){ applyAndValidate((e.target as HTMLInputElement).value); }
   function handleInputKey(e:KeyboardEvent){ if(e.key==='Enter'){ applyAndValidate(input); } }
 
@@ -84,6 +92,7 @@
   onDestroy(()=> cancelAnimationFrame(raf));
 </script>
 
+{#key current.id}
 <GameFrame
   title="Calculus"
   levelId={level.id}
@@ -102,6 +111,6 @@
   handleInput={handleChange}
   handleInputKey={handleInputKey}
 >
-  <span slot="footer-left"><MathRenderer expr={`\\displaystyle \\text{Time: } ${((performance.now()-start)/1000).toFixed(1)}\\,\\text{s}`}/></span>
-  <span slot="footer-right">Level: {level.id} • Topics: {level.topics.length}</span>
+  <span slot="footer-right">Topics: {level.topics.length}</span>
 </GameFrame>
+{/key}
