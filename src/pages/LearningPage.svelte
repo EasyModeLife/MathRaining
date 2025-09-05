@@ -1,5 +1,6 @@
 <script lang="ts">
   import { path } from '../router';
+  import SubNav from '../components/SubNav.svelte';
 
   // Reactive to path changes
   $: currentPath = $path;
@@ -8,17 +9,22 @@
 </script>
 
 <section class="learning-host" aria-label="{gameType} {mode}">
-  <div class="learning-box">
-    <h2>{gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'} {mode === 'instructions' ? 'Instructions' : 'Learning'}</h2>
-    {#if mode === 'instructions'}
-      <p>Get started with {gameType}: {gameType === 'arithmetic'
-        ? 'learn how to play arithmetic games and improve your math skills'
-        : 'understand calculus concepts and practice problem-solving'}.</p>
-    {:else}
-      <p>Review key concepts: {gameType === 'arithmetic'
-        ? 'basic operations, order of operations, mental math tricks'
-        : 'derivatives, integration rules, trigonometric functions'}.</p>
-    {/if}
+  <div class="learning-section">
+    <SubNav {currentPath} {gameType} />
+    <div class="learning-content">
+      <div class="learning-box">
+        <h2>{gameType === 'arithmetic' ? 'Arithmetic' : 'Calculus'} {mode === 'instructions' ? 'Instructions' : 'Learning'}</h2>
+        {#if mode === 'instructions'}
+          <p>Get started with {gameType}: {gameType === 'arithmetic'
+            ? 'learn how to play arithmetic games and improve your math skills'
+            : 'understand calculus concepts and practice problem-solving'}.</p>
+        {:else}
+          <p>Review key concepts: {gameType === 'arithmetic'
+            ? 'basic operations, order of operations, mental math tricks'
+            : 'derivatives, integration rules, trigonometric functions'}.</p>
+        {/if}
+      </div>
+    </div>
   </div>
 </section>
 
@@ -30,6 +36,17 @@
     display: grid;
     position: relative;
     z-index: 1;
+  }
+
+  .learning-section {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 0;
+  }
+
+  .learning-content {
+    min-height: 0;
+    position: relative;
   }
 
   .learning-box {
