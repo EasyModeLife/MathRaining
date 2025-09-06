@@ -105,25 +105,136 @@
 </div>
 
 <style>
-  .header-left { display:flex; align-items:centclamp(0.75rem, 2vw, er; )gap:re;
-idhemghdla
-;
-  }dis@mediap(mgniwi
-th: 768px)grid-t.plateo1dufat{mplate-rows: auto 1frcalumnto auto1fr: 1rem  grid-template-rows: 1fr auto auto;
-  }
-   dp: cimm (17x), 2.5vw, {.25: 1 ;
-  trows: 1fr auto auto;
-    }
-probl:mlobal([data-area="problem"]) {   grid-column: 1 / -1;imag  :global([data-are 2;agrid-row: ="im2e"]) {  :global([data-area="answer"]) { grid-column: 1 / -1;  g    :global([data-area="footer"]) { grid-column: 1 i -1; }
+  .trainer-layout {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  @media (min-wid-h: 1024px) {
-    .grid-moduoar {
-      gap: 1.5rlm;
-    }m  }
-</style>
-n: 2; }
-    :global([data-area="answer"]) { grid-column: 1 / -1; }
-  :global([data-area="footer"]) { grid-column: 1 / -1; }
+  .app-frame {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  .main-title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .app-main {
+    flex: 1;
+    overflow: hidden;
+    padding: 1rem;
+  }
+
+  .trainer-grid {
+    height: 100%;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .grid-modular {
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .answer-input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--bg);
+    color: var(--text);
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .answer-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  :global([data-area="problem"]) {
+    grid-column: 1 / -1;
+  }
+
+  :global([data-area="image"]) {
+    grid-column: 1 / -1;
+  }
+
+  :global([data-area="answer"]) {
+    grid-column: 1 / -1;
+  }
+
+  :global([data-area="footer"]) {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 768px) {
+    .grid-modular {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    :global([data-area="problem"]) {
+      grid-column: 1 / -1;
+    }
+
+    :global([data-area="image"]) {
+      grid-column: 1 / 3;
+      grid-row: 2;
+    }
+
+    :global([data-area="answer"]) {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+
+    :global([data-area="footer"]) {
+      grid-column: 1 / -1;
+      grid-row: 4;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-modular {
+      gap: 1.5rem;
+    }
+
+    .app-header {
+      padding: 1.5rem 2rem;
+    }
+
+    .app-main {
+      padding: 1.5rem;
+    }
   }
 </style>

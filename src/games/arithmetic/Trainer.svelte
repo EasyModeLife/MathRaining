@@ -3,7 +3,6 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import GameFrame from '../../components/GameFrame.svelte';
   import MathRenderer from '../../components/Math.svelte';
-  import DebugTimer from '../../components/DebugTimer.svelte';
   import { startTimer, resetTimer, cleanupTimer, remainingSeconds } from '../../stores/timer';
   import './styles/trainer.css';
 
@@ -195,8 +194,5 @@
   </span>
   <span slot="footer-right"><MathRenderer expr={`\\text{Range: } ${level.min}\\text{--}${level.max}\\quad \\text{Ops: } ${level.ops.join('\\,')}`}/></span>
 </GameFrame>
-
-<!-- Componente de debug del timer -->
-<DebugTimer />
 
 {/key}
