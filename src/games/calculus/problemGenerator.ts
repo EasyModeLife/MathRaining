@@ -91,12 +91,9 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
   const topic = topics[rand(0, topics.length - 1)];
 
   if (topic === 'derivative-poly') {
-  const deg = rand(1, 3);
-  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-6, 6));
-  // Ensure leading coefficient is non-zero
-  if (coeffs[0] === 0) coeffs[0] = rand(1, 6);
-  // Avoid trivial polynomial like constant 0
-  if (coeffs.every(c => c === 0)) coeffs = [rand(1, 6), ...coeffs.slice(1)];
+    const deg = rand(1, 3);
+    const coeffs = Array.from({ length: deg + 1 }, () => rand(-6, 6));
+    if (coeffs[0] === 0) coeffs[0] = rand(1, 6);
     const poly = polyToLaTeX(coeffs);
     const q = `\\frac{d}{dx} [${poly}]`;
     const derivedCoeffs = derivativePoly(coeffs);
@@ -106,11 +103,10 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
   }
 
   if (topic === 'integral-poly') {
-  const deg = rand(0, 3);
-  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-5, 5));
-  // Avoid all zeros
-  const sumAbs = coeffs.reduce((a, c) => a + Math.abs(c), 0);
-  if (sumAbs === 0) coeffs = [...coeffs.slice(0, -1), rand(1, 5)];
+    const deg = rand(0, 3);
+    const coeffs = Array.from({ length: deg + 1 }, () => rand(-5, 5));
+    const sumAbs = coeffs.reduce((a, c) => a + Math.abs(c), 0);
+    if (sumAbs === 0) coeffs[deg] = 1;
     const poly = polyToLaTeX(coeffs);
     const q = `\\int (${poly}) \\, dx`;
     const ans = integralPoly(coeffs);
@@ -127,9 +123,8 @@ export function createProblemGenerator(topics: CalcTopic[]): Exercise {
 
   // differential-poly
   const deg = rand(1, 3);
-  let coeffs: number[] = Array.from({ length: deg + 1 }, () => rand(-5, 5));
+  const coeffs = Array.from({ length: deg + 1 }, () => rand(-5, 5));
   if (coeffs[0] === 0) coeffs[0] = rand(1, 5);
-  if (coeffs.every(c => c === 0)) coeffs = [rand(1, 5), ...coeffs.slice(1)];
   const fprime = derivativePoly(coeffs);
   const x0 = rand(-4, 4);
   const poly = polyToLaTeX(coeffs);

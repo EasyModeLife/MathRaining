@@ -3,6 +3,8 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import GameFrame from '../../components/GameFrame.svelte';
   import MathRenderer from '../../components/Math.svelte';
+  import DebugTimer from '../../components/DebugTimer.svelte';
+  import { startTimer, resetTimer, cleanupTimer, remainingSeconds } from '../../stores/timer';
   import './styles/trainer.css';
 
   const dispatch = createEventDispatcher();
@@ -19,36 +21,35 @@
   let firstProblemOfLevel = true;
   let finished = false;
   const BASE_QUESTION_TIME = 8000;
-  let questionDeadline = 0;
-  let remainingMs = BASE_QUESTION_TIME;
-  let raf: number; let timedOutHandled = false;
+  let timedOutHandled = false;
   let questionShownAt = performance.now();
   let lastResponseMs = 0;
   let judgementLabel = '';
   let judgementColor = '';
   let judgementId = 0;
-  let start = performance.now();
   let showShortcuts = false;
 
   $: displayCorrect = correct < 0 ? 0 : correct;
 
+  // Manejar timeout del timer
+  $: if ($remainingSeconds <= 0 && !timedOutHandled && !firstProblemOfLevel) {
+    dispatch('answer', { correct: false });
+    timedOutHandled = true;
+    correct -= 2;
+    judgementLabel = 'miss'; judgementColor = '#FF715B'; judgementId += 1;
+    penaltyFlash = true;
+    setTimeout(() => { penaltyFlash = false; }, 200);
+  }
+
   function classify(ms:number){
-    if(ms===0) return {label:'—', color:'#4C5B5C'};
-    if(ms<2000) return {label:'perfect', color:'multi'};
-    if(ms<4000) return {label:'great', color:'#2F52E0'};
-    if(ms<6000) return {label:'good', color:'#BCED09'};
-    if(ms<8000) return {label:'bad', color:'#F9CB40'};
-    return {label:'miss', color:'#FF715B'};
+    if(ms < 2000) return { label: 'perfect', color: '#4C5B5C' };
+    if(ms < 4000) return { label: 'great', color: '#2F52E0' };
+    if(ms < 6000) return { label: 'good', color: '#BCED09' };
+    if(ms < 8000) return { label: 'bad', color: '#F9CB40' };
+    return { label: 'miss', color: '#FF715B' };
   }
-  function rand(min:number,max:number){
-    if (globalThis.crypto) {
-      const array = new Uint32Array(1);
-      globalThis.crypto.getRandomValues(array);
-      const cryptoRand = array[0] / (2**32 - 1);
-      return Math.floor(cryptoRand * (max - min + 1)) + min;
-    }
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+
+  function rand(min:number,max:number){ return Math.floor(Math.random()*(max-min+1))+min; }
   function randMultiple(min:number, max:number, factor:number){
     if(factor<=1) return rand(Math.max(1, min), max);
     const start = Math.max(1, Math.ceil(min / factor));
@@ -66,69 +67,58 @@
     if(magnitude >= 50) base += 1500;
     return base;
   }
-  // Evitar problemas triviales: suma con 0, resta a-a, multiplicación por 0/1, división por 0/1 o a/a
-  function isTrivial(op:string, a:number, b:number){
-    if(op === '+') return a === 0 || b === 0;
-    if(op === '-') return a === b; // restar mismo número
-    if(op === 'x') return a === 0 || b === 0 || a === 1 || b === 1;
-    if(op === '/') return b === 0 || b === 1 || a === b; // dividir por 0/1 o a/a
-    return false;
-  }
   function gen():Exercise {
     const op: import('./levels').Op = level.ops[Math.floor(Math.random()*level.ops.length)];
     const hasMultiples = Array.isArray(level.multiples) && level.multiples!.length>0;
     const m = hasMultiples ? level.multiples![Math.floor(Math.random()*level.multiples!.length)] : 1;
 
     let a:number = level.min, b:number = level.min;
-    const MAX_ATTEMPTS = 60;
-    if(op === '+' || op === '-' || op === 'x'){
-      let attempts = 0;
-      do{
-        a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-        b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
-        attempts++;
-      }while(isTrivial(op, a, b) && attempts < MAX_ATTEMPTS);
-      // if still trivial after attempts, accept and continue to avoid infinite loop
+    if(op === '+'){
+      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+    } else if(op === '-'){
+      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+    } else if(op === 'x'){
+      a = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
+      b = hasMultiples ? randMultiple(level.min, level.max, m) : randNonZero(level.min, level.max);
     } else { // '/'
-      // Ensure exact division with operands within range and a <= max, and avoid zeros/trivials
+      // Ensure exact division with operands within range and a <= max, and avoid zeros
       let attempts = 0; let found=false; let r:number = 1;
-      while(attempts++ < MAX_ATTEMPTS && !found){
+      while(attempts++ < 20 && !found){
         // Prefer result r >= 1
         r = hasMultiples ? Math.max(1, randMultiple(1, Math.max(1, level.max), m)) : Math.max(1, randNonZero(1, Math.max(1, level.max)));
         const maxB = Math.min(level.max, Math.floor(level.max / r));
         if(maxB < 1){ continue; }
         b = hasMultiples ? Math.max(1, randMultiple(1, maxB, m)) : randNonZero(1, maxB);
         a = r * b;
-        if(a >= 1 && a <= level.max && !isTrivial('/', a, b)){
-          found = true;
-        }
+        if(a >= 1 && a <= level.max){ found = true; }
       }
-      if(!found){ // fallback: try simple non-trivial pair
-        let attempts2 = 0;
-        do{
-          b = Math.max(1, randNonZero(level.min, level.max));
-          r = Math.max(1, randNonZero(level.min, level.max));
-          a = r * b;
-          attempts2++;
-        }while(isTrivial('/', a, b) && attempts2 < MAX_ATTEMPTS);
+      if(!found){ // fallback simple exact division similar to previous
+        b = Math.max(1, randNonZero(level.min, level.max));
+        r = Math.max(1, randNonZero(level.min, level.max));
+        a = r * b;
       }
     }
-  const answer = op==='+'?a+b: op==='-'?a-b: op==='x'?a*b: a/b;
-  // Pregunta en LaTeX: usar \times y \div
-  const opLatex = op==='+'?'+': op==='-'?'-': op==='x'? '\\times' : '\\div';
-  const qLatex = `\\displaystyle ${a} \\; ${opLatex} \\; ${b}`;
-  const timeMs = timeFor(op, a, b);
-  if (import.meta.env?.DEV) console.log('[arith] gen', { op, a, b, answer, qLatex, timeMs });
-  return { id: (Math.random().toString(36).slice(2))+Date.now().toString(36), a,b, op, answer, question:qLatex, timeMs };
+    const answer = op==='+'?a+b: op==='-'?a-b: op==='x'?a*b: a/b;
+    // Pregunta en LaTeX: usar \times y \div
+    const opLatex = op==='+'?'+': op==='-'?'-': op==='x'? '\\times' : '\\div';
+    const qLatex = `\\displaystyle ${a} \\; ${opLatex} \\; ${b}`;
+    const timeMs = timeFor(op, a, b);
+    if (import.meta.env?.DEV) console.log('[arith] gen', { op, a, b, answer, qLatex, timeMs });
+    return { id: (Math.random().toString(36).slice(2))+Date.now().toString(36), a,b, op, answer, question:qLatex, timeMs };
   }
   function next(){
     current = gen();
-    if(firstProblemOfLevel){ questionDeadline = 0; remainingMs = current.timeMs; }
-    else { questionDeadline = performance.now() + current.timeMs; remainingMs = current.timeMs; }
+    if(firstProblemOfLevel){
+      resetTimer();
+    } else {
+      startTimer(current.timeMs / 1000);
+    }
     timedOutHandled = false;
     questionShownAt = performance.now();
   }
-  function init(){ correct=0; input=''; flash=false; firstProblemOfLevel=true; start=performance.now(); next(); }
+  function init(){ correct=0; input=''; flash=false; firstProblemOfLevel=true; next(); }
   init();
 
   function applyAndValidate(raw:string){
@@ -163,34 +153,20 @@
     if(e.key==='Escape'){ input=''; e.preventDefault(); }
   }
   function handleInputKey(e:KeyboardEvent){
-  // Shift clears the input; ignore other modifier-only keys
-  if (e.key === 'Shift') { e.preventDefault(); input = ''; return; }
-  if (e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') { return; }
-    if(e.key===' ' && input.length===0){ e.preventDefault(); input='-'; applyAndValidate(input);}
+    // Shift clears the input; ignore other modifier-only keys
+    if (e.key === 'Shift') { e.preventDefault(); input = ''; return; }
+    if (e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') { return; }
+    if(e.key===' ' && input.length===0){ e.preventDefault(); input='-'; applyAndValidate(input);} 
   }
 
   onMount(()=>{
     window.addEventListener('keydown', handleGlobalKey);
     setTimeout(()=>inputEl?.focus(),0);
-    const tick = () => {
-      if(questionDeadline>0){
-        remainingMs = Math.max(0, questionDeadline - performance.now());
-        if(!timedOutHandled && remainingMs<=0){
-          dispatch('answer', { correct: false });
-          timedOutHandled = true;
-          correct -= 2;
-          judgementLabel = 'miss'; judgementColor = '#FF715B'; judgementId += 1;
-          penaltyFlash = true; setTimeout(()=> penaltyFlash = false, 300);
-          firstProblemOfLevel = false; input=''; flash=false; next();
-        }
-      } else {
-        remainingMs = current?.timeMs ?? BASE_QUESTION_TIME;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    questionDeadline = 0; raf = requestAnimationFrame(tick);
   });
-  onDestroy(()=>{ window.removeEventListener('keydown', handleGlobalKey); cancelAnimationFrame(raf); });
+  onDestroy(()=>{
+    window.removeEventListener('keydown', handleGlobalKey);
+    cleanupTimer();
+  });
 </script>
 
 {#key current.id}
@@ -199,8 +175,6 @@
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}
-  showTimer={!firstProblemOfLevel}
-  remainingSeconds={remainingMs/1000}
   question={current.question}
   flash={flash}
   penalty={penaltyFlash}
@@ -212,7 +186,17 @@
   handleInput={handleChange}
   handleInputKey={handleInputKey}
 >
-  <span slot="footer-left"><MathRenderer expr={`\\displaystyle \\text{Time: } ${((performance.now()-start)/1000).toFixed(1)}\\,\\text{s}`}/></span>
+  <span slot="footer-left">
+    {#if !firstProblemOfLevel}
+      <MathRenderer expr={`\\text{Time left: } ${$remainingSeconds.toFixed(1)}\\text{s}`}/>
+    {:else}
+      <MathRenderer expr={`\\text{Get ready...}`}/>
+    {/if}
+  </span>
   <span slot="footer-right"><MathRenderer expr={`\\text{Range: } ${level.min}\\text{--}${level.max}\\quad \\text{Ops: } ${level.ops.join('\\,')}`}/></span>
 </GameFrame>
+
+<!-- Componente de debug del timer -->
+<DebugTimer />
+
 {/key}

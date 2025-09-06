@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LevelProgress from '../games/arithmetic/components/LevelProgress.svelte';
+  import LevelProgress from './LevelProgress.svelte';
   import ProblemDisplay from '../games/arithmetic/components/ProblemDisplay.svelte';
   import '../games/arithmetic/styles/trainer.css';
   import GameBox from './GameBox.svelte';
@@ -14,6 +14,8 @@
   export let correct: number;
   export let showTimer: boolean = false;
   export let remainingSeconds: number = 0;
+  // duración por defecto para sincronizar marcador visual (segundos)
+  export let questionDurationSeconds: number = 8;
 
   export let question: string = '';
   export let flash: boolean = false;
@@ -28,6 +30,7 @@
   export let handleInput: (e: Event) => void;
   export let handleInputKey: (e: KeyboardEvent) => void;
   export let disabled: boolean = false;
+  export let key: any;
 </script>
 
 <div class="trainer-layout">
@@ -35,13 +38,15 @@
     <header class="app-header">
       <div class="header-left">
         <slot name="header-left"></slot>
+        <h1 class="main-title">{title}</h1>
       </div>
       <LevelProgress
         {levelId}
         {total}
         {correct}
         {showTimer}
-        remainingSeconds={remainingSeconds}
+  remainingSeconds={remainingSeconds}
+  questionDurationSeconds={questionDurationSeconds}
       />
     </header>
     <main class="app-main">
@@ -100,29 +105,25 @@
 </div>
 
 <style>
-  .header-left { display:flex; align-items:center; gap:.5rem; }
-  .grid-modular{
-    display:grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto auto;
-    gap: clamp(0.75rem, 2vw, 1rem);
-    min-height: 0;
+  .header-left { display:flex; align-items:centclamp(0.75rem, 2vw, er; )gap:re;
+idhemghdla
+;
+  }dis@mediap(mgniwi
+th: 768px)grid-t.plateo1dufat{mplate-rows: auto 1frcalumnto auto1fr: 1rem  grid-template-rows: 1fr auto auto;
   }
-  @media (min-width: 768px){
-    .grid-modular{
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr auto auto;
-      gap: clamp(1rem, 2.5vw, 1.25rem);
+   dp: cimm (17x), 2.5vw, {.25: 1 ;
+  trows: 1fr auto auto;
     }
-    :global([data-area="problem"]) { grid-column: 1 / -1; }
-    :global([data-area="image"]) { grid-column: 2; grid-row: 1 / 2; }
-    :global([data-area="answer"]) { grid-column: 1 / -1; }
-    :global([data-area="footer"]) { grid-column: 1 / -1; }
+probl:mlobal([data-area="problem"]) {   grid-column: 1 / -1;imag  :global([data-are 2;agrid-row: ="im2e"]) {  :global([data-area="answer"]) { grid-column: 1 / -1;  g    :global([data-area="footer"]) { grid-column: 1 i -1; }
   }
 
-  @media (min-width: 1024px) {
-    .grid-modular {
-      gap: 1.5rem;
-    }
+  @media (min-wid-h: 1024px) {
+    .grid-moduoar {
+      gap: 1.5rlm;
+    }m  }
+</style>
+n: 2; }
+    :global([data-area="answer"]) { grid-column: 1 / -1; }
+  :global([data-area="footer"]) { grid-column: 1 / -1; }
   }
 </style>
