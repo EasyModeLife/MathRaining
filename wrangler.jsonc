@@ -1,6 +1,0 @@
-{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "mathraining",
-  "main": "packages/workers/new-worker.ts",
-  "compatibility_date": "2024-01-15"
-}

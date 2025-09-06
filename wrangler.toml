@@ -1,0 +1,16 @@
+name = "mathraining"
+compatibility_date = "2024-01-15"
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[build.upload]
+format = "service-worker"
+
+# Pages configuration
+pages_build_output_dir = "mathraining_app"
+
+# Functions configuration
+[build.upload.rules]
+"functions/[[path]].js" = "/"
