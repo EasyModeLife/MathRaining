@@ -44,22 +44,6 @@
     box-sizing: border-box;
   }
 
-  /* Vista Home: grilla de tarjetas dentro del 100% de main */
-  .games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 25vw, 320px), 1fr));
-    gap: clamp(1rem, 4vw, 2rem);
-    padding: clamp(1.5rem, 6vw, 3rem) clamp(2rem, 8vw, 4rem);
-    height: 100%;
-    width: 100vw;
-    max-width: 100vw;
-    margin: 0;
-    box-sizing: border-box;
-    place-items: stretch;
-    justify-content: center;
-    align-content: start;
-  }
-
   /* Host del juego: ocupa 100% del main sin desbordar */
   .game-host {
     height: 100%;
@@ -155,21 +139,7 @@
   }
 
   /* Breakpoints altamente responsivos */
-  @media (max-width: 1024px) {
-    .games-grid {
-      padding: 1rem 1.5rem;
-      gap: 1rem;
-    }
-  }
-
   @media (max-width: 768px) {
-    .games-grid {
-      grid-template-columns: 1fr;
-      max-width: 500px;
-      gap: 1.5rem;
-      padding: 2rem 1.5rem;
-    }
-
     .learning-box {
   padding: 2rem 1.5rem;
     }
@@ -188,19 +158,7 @@
     .learning-box { max-width: 700px; }
   }
 
-  @media (max-width: 640px) {
-    .games-grid {
-      padding: 1.5rem 1rem;
-      gap: 1.25rem;
-    }
-  }
-
   @media (max-width: 480px) {
-    .games-grid {
-      padding: 1.25rem 0.75rem;
-      gap: 1rem;
-    }
-
     .learning-box {
       padding: 1.5rem 1rem;
       gap: 1rem;
@@ -234,10 +192,6 @@
   }
 
   @media (max-width: 360px) {
-    .games-grid {
-      padding: 1rem 0.5rem;
-    }
-
     .learning-box {
       padding: 1.25rem 0.75rem;
     }

@@ -43,7 +43,6 @@
 <style>
   .page-subnav {
     /* Same as .page-header */
-    border-bottom: 1px solid rgba(255,255,255,.05);
     background: transparent;
     display: flex;
     align-items: center;
@@ -95,7 +94,7 @@
     text-decoration: none;
     color: var(--text);
     border: 1px solid var(--border);
-    background: var(--surface-alt);
+    background: transparent;
     padding: clamp(0.5rem, 1.5vw, 0.6rem) clamp(1rem, 2.5vw, 1.25rem);
     border-radius: 10px;
     font-size: clamp(0.95rem, 2vw, 1rem);
@@ -108,14 +107,14 @@
   }
 
   .subnav-link:hover {
-    background: var(--surface-alt);
+    background: rgba(255,255,255,.05);
     border-color: rgba(255,255,255,.3);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px -4px rgba(0,0,0,.15);
   }
 
   .subnav-link[aria-current="page"] {
-    background: var(--accent-cool);
+    background: rgba(47, 82, 224, 0.8);
     color: white;
     border-color: var(--accent-cool);
     font-weight: 700;
@@ -123,7 +122,7 @@
   }
 
   .subnav-link[aria-current="page"]:hover {
-    background: var(--accent-cool);
+    background: rgba(47, 82, 224, 0.9);
     transform: translateY(0);
     box-shadow: 0 4px 12px -4px var(--accent-cool);
   }
@@ -189,12 +188,12 @@
   /* Dark mode enhancements */
   @media (prefers-color-scheme: dark) {
     .subnav-link {
-      background: rgba(255,255,255,.05);
+      background: transparent;
       border-color: rgba(255,255,255,.1);
     }
 
     .subnav-link:hover {
-      background: rgba(255,255,255,.08);
+      background: rgba(255,255,255,.05);
     }
   }
 

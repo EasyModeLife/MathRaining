@@ -26,8 +26,7 @@
 <style>
   .page-header {
     height: var(--header-pct);
-    background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,0));
-    border-bottom: 1px solid rgba(255,255,255,.05);
+    background: transparent;
     display: flex;
     align-items: center;
     padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem);

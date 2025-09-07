@@ -24,7 +24,7 @@
   justify-content: center;
   padding: var(--trainer-padding);
   box-sizing: border-box;
-  background: linear-gradient(155deg, var(--bg) 0%, var(--surface-alt) 70%);
+  background: transparent;
   color: var(--text);
   overflow: hidden;
   container-type: size;
@@ -137,34 +137,7 @@
   background: transparent;
 }
 
-/* Problem Display */
-.problem-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  background: transparent;
-  transition: transform .2s;
-  min-height: 150px; /* Minimum height for the problem area */
-  flex-grow: 1;
-}
-
-.problem-text {
-  font-size: clamp(1.4rem, 8vmin, 3.2rem);
-  font-size: clamp(1.4rem, 6cqi, 3.2rem);
-  font-weight: 700;
-  letter-spacing: clamp(1px, 0.3vw, 2.5px);
-  transition: transform .2s, opacity .2s;
-  max-width: 100%;
-  word-break: break-word;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.problem-wrapper.flash .problem-text { transform: scale(1.08); opacity: .2; }
-.problem-wrapper.penalty .problem-text { animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both; }
+/* Problem Display is now handled in ProblemDisplay component */
 
 @keyframes shake {
   10%, 90% { transform: translate3d(-1px, 0, 0); }
@@ -191,11 +164,6 @@
     gap: 0.75rem;
   }
 
-  .problem-text {
-    font-size: clamp(1.6rem, 10vw, 3.8rem);
-    letter-spacing: clamp(1px, 0.4vw, 2px);
-  }
-
   .answer-input {
     font-size: clamp(1.4rem, 6vw, 2.4rem);
     padding: 0.8rem 1.2rem;
@@ -211,10 +179,6 @@
     padding: 0.5rem;
   }
 
-  .problem-text {
-    font-size: clamp(1.2rem, 7vw, 2.8rem);
-  }
-
   .answer-input {
     font-size: clamp(1.2rem, 5vw, 2.2rem);
     padding: 0.7rem 1rem;
@@ -225,10 +189,6 @@
 @media (max-height: 500px) and (orientation: landscape) {
   .trainer-layout {
     padding: 0.25rem;
-  }
-
-  .problem-text {
-    font-size: clamp(1rem, 4vh, 2.2rem);
   }
 
   .answer-input {
@@ -252,11 +212,6 @@
     gap: 1.5rem;
   }
 
-  .problem-text {
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    font-size: clamp(3rem, 7.5cqi, 6.5rem);
-  }
-
   .answer-input {
     font-size: clamp(2.4rem, 8vw, 5rem);
     font-size: clamp(2.4rem, 6.5cqi, 5rem);
@@ -267,10 +222,6 @@
 @media (min-width: 1024px) {
   .app-frame {
     max-width: 800px;
-  }
-
-  .problem-text {
-    font-size: clamp(3.5rem, 9vw, 7rem);
   }
 
   .answer-input {
