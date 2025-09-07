@@ -116,69 +116,68 @@
   /* Breakpoints altamente responsivos */
   @media (max-width: 768px) {
     .game-card {
-      min-height: clamp(160px, 24vh, 280px);
-      max-height: clamp(200px, 32vh, 380px);
+      min-height: clamp(120px, 18vh, 240px);
+      max-height: clamp(160px, 26vh, 320px);
     }
 
     .game-card__media {
-      min-height: clamp(70px, 15vh, 150px);
-      font-size: clamp(1.8rem, 5vw, 4rem);
+      min-height: clamp(50px, 12vh, 120px);
+      font-size: clamp(1.6rem, 4vw, 3.5rem);
     }
 
     .game-card__body {
-      padding: 1rem;
+      padding: 0.8rem;
     }
 
     .game-card__title {
-      font-size: clamp(1rem, 2.8vw, 1.3rem);
+      font-size: clamp(0.9rem, 2.6vw, 1.2rem);
     }
 
     .game-card__desc {
-      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
-      margin-top: 0.4rem;
+      font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+      margin-top: 0.3rem;
     }
   }
 
   @media (max-width: 640px) {
     .game-card {
-      min-height: clamp(140px, 20vh, 240px);
-      max-height: clamp(180px, 28vh, 340px);
+      min-height: clamp(100px, 16vh, 200px);
+      max-height: clamp(140px, 22vh, 280px);
     }
 
     .game-card__media {
-      min-height: clamp(60px, 12vh, 120px);
-      font-size: clamp(1.6rem, 4vw, 3.5rem);
+      min-height: clamp(40px, 10vh, 100px);
+      font-size: clamp(1.4rem, 3.5vw, 3rem);
     }
 
     .game-card__title {
-      font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+      font-size: clamp(0.85rem, 2.4vw, 1.1rem);
     }
   }
 
-  @media (max-width: 480px) {
+    @media (max-width: 480px) {
     .game-card {
-      min-height: clamp(120px, 18vh, 200px);
-      max-height: clamp(150px, 24vh, 280px);
+      min-height: clamp(90px, 14vh, 180px);
+      max-height: clamp(120px, 18vh, 240px);
       border-radius: 12px;
     }
 
     .game-card__media {
-      min-height: clamp(50px, 10vh, 100px);
-      font-size: clamp(1.4rem, 3.5vw, 3rem);
+      min-height: clamp(35px, 8vh, 80px);
+      font-size: clamp(1.2rem, 3vw, 2.5rem);
       letter-spacing: 0.2rem;
     }
 
     .game-card__body {
-      padding: 0.75rem;
+      padding: 0.6rem;
     }
 
     .game-card__title {
-      font-size: clamp(0.9rem, 2.4vw, 1.1rem);
+      font-size: clamp(0.8rem, 2.2vw, 1rem);
     }
 
     .game-card__desc {
-      font-size: clamp(0.8rem, 2vw, 0.9rem);
-      line-height: 1.3;
+      font-size: clamp(0.75rem, 1.8vw, 0.85rem);
     }
   }
 

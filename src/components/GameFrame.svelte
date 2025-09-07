@@ -301,4 +301,14 @@
       padding: 1.5rem;
     }
   }
+
+  @media (max-width: 768px) {
+    .app-header {
+      padding: 0.5rem 1rem;
+    }
+
+    .app-main {
+      padding: 0.5rem;
+    }
+  }
 </style>

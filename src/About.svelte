@@ -15,7 +15,7 @@
     If you want to help me continue and maintain this type of project, you can support me at <a href="https://ko-fi.com/hugoandresamayachairez" target="_blank" rel="noopener noreferrer">ko-fi.com/hugoandresamayachairez</a>.
   </p>
 
-  <a href="/#/">Back to Training</a>
+  <a href="/">Back to Training</a>
 </div>
 
 <style>

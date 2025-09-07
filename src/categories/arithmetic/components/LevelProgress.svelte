@@ -26,7 +26,7 @@
   .level-progress__label { color: var(--text); }
   .level-progress__count-inline { min-width:48px; }
   .level-progress__timer-inline { opacity:.8; }
-  @media (max-width:560px){ .level-progress { gap:.8rem; } .level-progress__label { font-size:.78rem; } }
+  @media (max-width:560px){ .level-progress { gap:.8rem; } .level-progress__label { font-size:.65rem; } }
   @media (max-width:600px){
     .level-progress__label { font-size:.7rem; }
   }
