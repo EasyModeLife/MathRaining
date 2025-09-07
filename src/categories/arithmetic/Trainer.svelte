@@ -170,7 +170,6 @@
 
 {#key current.id}
 <GameFrame
-  title="MathRaining"
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}

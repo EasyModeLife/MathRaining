@@ -9,6 +9,7 @@
 <header class="page-header">
   <div class="header-box">
     <div class="brand">
+      <img src="/logo.svg" alt="MathRaining Logo" class="logo" on:click={goHome} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goHome(); } }} />
       <button class="title" on:click={goHome} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goHome(); } }}>MathRaining</button>
       <small class="view-indicator" aria-live="polite">{currentPath}</small>
     </div>
@@ -57,6 +58,19 @@
   }
 
   .brand { height: 100%; display:flex; align-items:center; gap:.75rem; padding: 0 .25rem; }
+  .logo {
+    height: clamp(1.5rem, 4vw, 2.5rem);
+    width: auto;
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.1));
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 0.25rem;
+    border-radius: 6px;
+    outline: none;
+  }
+  .logo:hover { transform: scale(1.05); }
+  .logo:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .logo:focus:not(:hover) { transform: none; }
   .title { font-size: clamp(1.1rem, 2.5vw, 1.6rem); margin: 0; letter-spacing: .4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; background: none; border: none; color: inherit; padding: 0; text-align: left; }
   .title:hover { opacity: 0.8; }
   .title:focus { outline: 2px solid var(--accent); outline-offset: 2px; }

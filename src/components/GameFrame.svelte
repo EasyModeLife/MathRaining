@@ -9,7 +9,6 @@
   const hasImage = !!$$slots?.image;
 
   // Props comunes
-  export let title: string = '';
   export let levelId: number;
   export let total: number;
   export let correct: number;
@@ -109,7 +108,6 @@
     <header class="app-header">
       <div class="header-left">
         <slot name="header-left"></slot>
-        <h1 class="main-title">{title}</h1>
       </div>
       <LevelProgress
         {levelId}
@@ -204,12 +202,7 @@
     gap: clamp(0.75rem, 2vw, 1rem);
   }
 
-  .main-title {
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    font-weight: 600;
-    margin: 0;
-    color: var(--text);
-  }
+  /* title removed: styles kept for reference */
 
   .app-main {
     flex: 1;

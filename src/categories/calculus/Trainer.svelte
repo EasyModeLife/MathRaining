@@ -111,7 +111,6 @@
 
 {#key current.id}
 <GameFrame
-  title="Calculus"
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}
