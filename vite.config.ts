@@ -7,8 +7,6 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 export default defineConfig({
   plugins: [svelte()],
   build: {
-    // Enable compression
-    compress: true,
     // Better chunking for optimal caching
     rollupOptions: {
       output: {
@@ -31,16 +29,28 @@ export default defineConfig({
         },
       },
     },
-    // Enable brotli compression
-    brotliSize: true,
     // Minify with esbuild
     minify: 'esbuild',
     // Generate sourcemaps for debugging
     sourcemap: false, // Disable in production for smaller bundles
-    // Target modern browsers
-    target: 'es2020',
-    // Optimize CSS
-    cssCodeSplit: true,
-    // Preload modules for better LCP
-    preloadModules: ['svelte', 'katex'],
   },
+
+  // Base configuration
+  base: '/',
+
+  // Optimize development server
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
+
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['katex', 'svelte'],
+    exclude: [], // Don't exclude anything critical
+  },
+
+  // Public directory
+  publicDir: 'public',
+});
