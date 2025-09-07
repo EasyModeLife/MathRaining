@@ -190,7 +190,8 @@
   .app-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 1rem;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--border);
     background: var(--bg-secondary);

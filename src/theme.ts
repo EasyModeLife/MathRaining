@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
-export type Theme = 'deep-blue' | 'solarized-light' | 'dark' | 'pink-purple';
-export const THEMES: Theme[] = ['deep-blue', 'solarized-light', 'dark', 'pink-purple'];
+export type Theme = 'deep-blue' | 'solarized-light' | 'dark';
+export const THEMES: Theme[] = ['deep-blue', 'solarized-light', 'dark'];
 
 const STORAGE_KEY = 'theme';
 
@@ -15,8 +15,6 @@ export function labelForTheme(t: Theme): string {
       return 'White Solarized';
     case 'dark':
       return 'Dark';
-    case 'pink-purple':
-      return 'Pink Purple';
   }
 }
 

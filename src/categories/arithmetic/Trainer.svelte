@@ -173,6 +173,8 @@
   levelId={level.id}
   total={level.total}
   correct={displayCorrect}
+  showTimer={!firstProblemOfLevel}
+  remainingSeconds={$remainingSeconds}
   question={current.question}
   flash={flash}
   penalty={penaltyFlash}
@@ -184,13 +186,6 @@
   handleInput={handleChange}
   handleInputKey={handleInputKey}
 >
-  <span slot="footer-left">
-    {#if !firstProblemOfLevel}
-      <MathRenderer expr={`\\text{Time left: } ${$remainingSeconds.toFixed(1)}\\text{s}`}/>
-    {:else}
-      <MathRenderer expr={`\\text{Get ready...}`}/>
-    {/if}
-  </span>
   <span slot="footer-right"><MathRenderer expr={`\\text{Range: } ${level.min}\\text{--}${level.max}\\quad \\text{Ops: } ${level.ops.join('\\,')}`}/></span>
 </GameFrame>
 
