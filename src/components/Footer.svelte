@@ -69,8 +69,8 @@
     height: clamp(40px, 10.8vw, 50px);
     border-radius: 100%;
     background: transparent;
-    border: none;
-    padding: 0;
+    border: none !important;
+    padding: 0 !important;
     color: var(--text, #e6edf3);
     cursor: pointer;
     text-decoration: none;
@@ -80,14 +80,6 @@
     overflow: hidden;
   }
 
-  .footer-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255,255,255,.1) 0%, rgba(255,255,255,.05) 100%);
-    opacity: 0;
-  }
 
   .footer-btn:hover::before,
   .footer-btn:focus::before {
@@ -103,10 +95,7 @@
     flex-shrink: 0;
   }
 
-  .footer-btn:hover .icon,
-  .footer-btn:focus .icon {
-    stroke: var(--accent-cool, #2f52e0);
-  }
+
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
@@ -163,18 +152,22 @@
   /* High contrast mode */
   @media (prefers-contrast: high) {
     .footer-btn {
-      background: linear-gradient(135deg, var(--text, #e6edf3) 0%, rgba(255,255,255,0.9) 100%);
-      color: var(--bg, #0d1117);
+      background: linear-gradient(135deg, var(--text, #e6edf3) 0%, rgba(255,255,255,0.9) 100%) !important;
+      color: var(--bg, #0d1117) !important;
+    }
+
+    .footer-btn::before {
+      content: none !important;
     }
 
     .icon {
-      stroke: var(--bg, #0d1117);
+      stroke: var(--bg, #0d1117) !important;
     }
 
     .footer-btn:hover,
     .footer-btn:focus {
-      background: var(--accent-cool, #2f52e0);
-      color: #fff;
+      background: var(--accent-cool, #2f52e0) !important;
+      color: #fff !important;
     }
   }
 </style>
