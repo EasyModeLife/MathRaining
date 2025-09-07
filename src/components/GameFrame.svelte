@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
   import LevelProgress from './LevelProgress.svelte';
   import ProblemDisplay from '../games/arithmetic/components/ProblemDisplay.svelte';
   import '../games/arithmetic/styles/trainer.css';
@@ -15,7 +16,7 @@
   export let showTimer: boolean = false;
   export let remainingSeconds: number = 0;
   // duración por defecto para sincronizar marcador visual (segundos)
-  export let questionDurationSeconds: number = 8;
+  // (no expuesto, eliminado de las props públicas porque no se utiliza externamente)
 
   export let question: string = '';
   export let flash: boolean = false;
@@ -30,7 +31,77 @@
   export let handleInput: (e: Event) => void;
   export let handleInputKey: (e: KeyboardEvent) => void;
   export let disabled: boolean = false;
-  export let key: any;
+
+  // Heurística para detectar dispositivos de escritorio con teclado
+  function isDesktopWithKeyboard(): boolean {
+    try {
+      if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+        if (mq.matches) return true;
+      }
+      return typeof window !== 'undefined' && window.innerWidth >= 1024;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Captura global: enfoca el input y reenvía caracteres al handler del padre
+  function globalKeyboardCapture(e: KeyboardEvent) {
+    if (!isDesktopWithKeyboard()) return;
+    const target = e.target as HTMLElement | null;
+    const tag = target?.tagName ?? '';
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) {
+      if (target === inputEl) return; // deja que el propio input gestione el evento
+      return; // ignora si el foco está en otro control
+    }
+    if (disabled) return;
+    if (e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') return;
+
+    // Asegurar foco en el input para compatibilidad de accesibilidad
+    inputEl?.focus();
+
+    let newValue = input ?? '';
+    if (e.key === 'Backspace') {
+      newValue = newValue.slice(0, -1);
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    } else if (e.key === 'Escape') {
+      newValue = '';
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    } else if (e.key === 'Enter') {
+      if (handleInputKey) handleInputKey(e);
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    } else if (e.key.length === 1) {
+      newValue = newValue + e.key;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    } else {
+      return;
+    }
+
+    if (typeof handleInput === 'function') {
+      const fakeEvent = { target: { value: newValue } } as unknown as Event;
+      handleInput(fakeEvent);
+    } else if (inputEl) {
+      input = newValue;
+      inputEl.value = newValue;
+      const ev = new Event('input', { bubbles: true });
+      inputEl.dispatchEvent(ev);
+    }
+  }
+
+  onMount(() => {
+    // focus inicial (si está presente)
+    setTimeout(() => inputEl?.focus(), 0);
+    if (isDesktopWithKeyboard()) window.addEventListener('keydown', globalKeyboardCapture);
+  });
+
+  onDestroy(() => {
+    if (isDesktopWithKeyboard()) window.removeEventListener('keydown', globalKeyboardCapture);
+  });
 </script>
 
 <div class="trainer-layout">
@@ -45,8 +116,7 @@
         {total}
         {correct}
         {showTimer}
-  remainingSeconds={remainingSeconds}
-  questionDurationSeconds={questionDurationSeconds}
+        remainingSeconds={remainingSeconds}
       />
     </header>
     <main class="app-main">
