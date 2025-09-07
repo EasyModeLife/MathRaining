@@ -4,6 +4,7 @@
   import ProblemDisplay from '../categories/arithmetic/components/ProblemDisplay.svelte';
   import '../categories/arithmetic/styles/trainer.css';
   import GameBox from './GameBox.svelte';
+  import MobileKeyboard from './MobileKeyboard.svelte';
   // Render condicional de slots
   // @ts-ignore - $$slots es inyectado por Svelte
   const hasImage = !!$$slots?.image;
@@ -98,9 +99,26 @@
     if (isDesktopWithKeyboard()) window.addEventListener('keydown', globalKeyboardCapture);
   });
 
-  onDestroy(() => {
-    if (isDesktopWithKeyboard()) window.removeEventListener('keydown', globalKeyboardCapture);
-  });
+  // Handle virtual keyboard keys
+  function handleVirtualKey(key: string) {
+    if (disabled) return;
+    let newValue = input ?? '';
+    if (key === 'Backspace') {
+      newValue = newValue.slice(0, -1);
+    } else {
+      newValue = newValue + key;
+    }
+
+    if (typeof handleInput === 'function') {
+      const fakeEvent = { target: { value: newValue } } as unknown as Event;
+      handleInput(fakeEvent);
+    } else if (inputEl) {
+      input = newValue;
+      inputEl.value = newValue;
+      const ev = new Event('input', { bubbles: true });
+      inputEl.dispatchEvent(ev);
+    }
+  }
 </script>
 
 <div class="trainer-layout">
@@ -151,12 +169,17 @@
               on:input={handleInput}
               on:keydown={handleInputKey}
               {disabled}
+              readonly={!isDesktopWithKeyboard()}
               autocomplete="off"
-              inputmode="text"
+              inputmode={isDesktopWithKeyboard() ? "text" : "none"}
               aria-label="Answer"
             />
           </GameBox>
         </slot>
+
+        {#if !isDesktopWithKeyboard()}
+          <MobileKeyboard onKey={handleVirtualKey} />
+        {/if}
 
         <!-- Caja de pie -->
         <GameBox area="footer">
@@ -194,6 +217,7 @@
     flex: 1;
     overflow: hidden;
     padding: 0.5rem;
+    overflow-y: auto;
   }
 
   .game-app-sections {
