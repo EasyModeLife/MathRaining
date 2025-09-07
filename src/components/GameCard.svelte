@@ -1,7 +1,7 @@
 <script lang="ts">
   export let title: string;
   export let description: string;
-  export let mathExpr: string;
+  export let svgContent: string;
   export let onClick: () => void;
   export let ariaLabel: string;
 </script>
@@ -14,9 +14,7 @@
   aria-label={ariaLabel}
 >
   <div class="game-card__media" aria-hidden="true">
-    {#await import('../components/Math.svelte') then MathComp}
-      <svelte:component this={MathComp.default} expr={mathExpr} display={true} />
-    {/await}
+    {@html svgContent}
   </div>
   <div class="game-card__body">
     <h2 class="game-card__title">{title}</h2>

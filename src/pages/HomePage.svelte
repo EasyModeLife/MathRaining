@@ -15,7 +15,7 @@
   <GameCard
     title="Arithmetic"
     description="Practice addition, subtraction, multiplication and division with time limits and increasing levels."
-    mathExpr={'\\times\\ \\div\\ +\\ -'}
+    svgContent={`<svg viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg"><text x="10" y="35" font-size="24" fill="currentColor" font-family="serif">× ÷ + −</text></svg>`}
     onClick={openArithmetic}
     ariaLabel="Enter Arithmetic"
   />
@@ -23,7 +23,7 @@
   <GameCard
     title="Calculus"
     description="Basic derivatives, integration rules and trigonometric functions with text verification."
-    mathExpr={'\\int \\; \\frac{d}{dx}'}
+    svgContent={`<svg viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg"><text x="10" y="35" font-size="24" fill="currentColor" font-family="serif">∫</text><text x="30" y="30" font-size="16" fill="currentColor" font-family="serif">d</text><text x="42" y="30" font-size="16" fill="currentColor" font-family="serif">/</text><text x="48" y="30" font-size="16" fill="currentColor" font-family="serif">dx</text></svg>`}
     onClick={openCalculus}
     ariaLabel="Enter Calculus"
   />
