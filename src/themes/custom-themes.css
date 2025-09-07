@@ -10,6 +10,8 @@
   --surface-alt: rgba(255,255,255,0.08);
   --accent-cool: #2f52e0;
   --accent-warm: #ff6b35;
+  --accent-active: rgba(47, 82, 224, 0.8);
+  --accent-active-hover: rgba(47, 82, 224, 0.9);
 }
 
 /* Solarized Light Theme */
@@ -21,6 +23,8 @@
   --surface-alt: rgba(0,0,0,0.08);
   --accent-cool: #268bd2;
   --accent-warm: #dc322f;
+  --accent-active: rgba(38, 139, 210, 0.8);
+  --accent-active-hover: rgba(38, 139, 210, 0.9);
 }
 
 /* Dark Theme */
@@ -32,6 +36,8 @@
   --surface-alt: rgba(255,255,255,0.12);
   --accent-cool: #4a9eff;
   --accent-warm: #ff6b6b;
+  --accent-active: rgba(74, 158, 255, 0.8);
+  --accent-active-hover: rgba(74, 158, 255, 0.9);
 }
 
 /* Pink Purple Theme */
@@ -43,4 +49,6 @@
   --surface-alt: rgba(255,255,255,0.12);
   --accent-cool: #ff6bd6;
   --accent-warm: #ff9ff3;
+  --accent-active: rgba(255, 107, 214, 0.8);
+  --accent-active-hover: rgba(255, 107, 214, 0.9);
 }

@@ -115,7 +115,7 @@
   }
 
   .subnav-link[aria-current="page"] {
-    background: rgba(47, 82, 224, 0.8);
+    background: var(--accent-active);
     color: white;
     border-color: var(--accent-cool);
     font-weight: 700;
@@ -123,7 +123,7 @@
   }
 
   .subnav-link[aria-current="page"]:hover {
-    background: rgba(47, 82, 224, 0.9);
+    background: var(--accent-active-hover);
     transform: translateY(0);
     box-shadow: 0 4px 12px -4px var(--accent-cool);
   }
