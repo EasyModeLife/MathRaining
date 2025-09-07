@@ -23,6 +23,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--trainer-padding);
+  margin-top: 0;
   box-sizing: border-box;
   background: transparent;
   color: var(--text);

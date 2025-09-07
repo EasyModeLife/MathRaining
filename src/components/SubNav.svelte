@@ -52,6 +52,7 @@
     top: 0;
     z-index: 10;
     overflow-x: hidden;
+    margin-bottom: 0;
   }
 
   .subnav-box {
