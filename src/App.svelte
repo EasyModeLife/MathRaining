@@ -36,12 +36,12 @@
   }
 
   // Tamaños porcentuales para header/main/footer
-  const HEADER_PCT = 12; // % de la página
+  const HEADER_PCT = 7; // % de la página (60% de 12)
   const FOOTER_PCT = 5;  // % de la página
 </script>
 
 <div class="page" style={`--header:${HEADER_PCT}%;--header-pct:${HEADER_PCT}%;--footer:${FOOTER_PCT}%`}>
-  <Header {currentPath} goHome={() => navigate('/')} {cycleTheme} {HEADER_PCT} />
+  <Header {currentPath} goHome={() => navigate('/')} {cycleTheme} />
   <MainContent {currentPath} on:answer={handleAnswer} />
   <Footer {FOOTER_PCT} />
 </div>

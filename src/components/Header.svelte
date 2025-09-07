@@ -4,16 +4,12 @@
   export let currentPath = '/';
   export let goHome: () => void;
   export let cycleTheme: () => void;
-  export let HEADER_PCT: number;
 </script>
 
 <header class="page-header">
   <div class="header-box">
     <div class="brand">
-      {#if currentPath !== '/'}
-        <button class="back" on:click={goHome} aria-label="Volver">⟵</button>
-      {/if}
-      <h1 class="title">MathRaining</h1>
+      <button class="title" on:click={goHome} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goHome(); } }}>MathRaining</button>
       <small class="view-indicator" aria-live="polite">{currentPath}</small>
     </div>
     <nav class="nav">
@@ -61,8 +57,9 @@
   }
 
   .brand { height: 100%; display:flex; align-items:center; gap:.75rem; padding: 0 .25rem; }
-  .title { font-size: clamp(1.1rem, 2.5vw, 1.6rem); margin: 0; letter-spacing: .4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .back { border:1px solid var(--border); background: var(--surface-alt); color: var(--text); border-radius: 10px; padding:.4rem .6rem; cursor: pointer; }
+  .title { font-size: clamp(1.1rem, 2.5vw, 1.6rem); margin: 0; letter-spacing: .4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; background: none; border: none; color: inherit; padding: 0; text-align: left; }
+  .title:hover { opacity: 0.8; }
+  .title:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   .nav { display:flex; align-items:center; gap:.5rem; }
   .action {
     border:1px solid var(--border);
