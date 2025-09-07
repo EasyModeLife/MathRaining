@@ -1,17 +1,15 @@
 <script lang="ts">
-  import MathRenderer from '../../../components/Math.svelte';
   export let levelId: number;
   export let total: number;
   export let correct: number;
   export let showTimer: boolean;
   export let remainingSeconds: number;
-  $: countExpr = `\\displaystyle \\frac{${Math.max(0, correct)}}{${total}}`;
 </script>
 
 <div class="level-progress">
   <div class="level-progress__meta">
     <div class="level-progress__label">Level {levelId}</div>
-    <div class="level-progress__count-inline" aria-hidden="true"><MathRenderer expr={countExpr} /></div>
+    <div class="level-progress__count-inline" aria-hidden="true">{correct}/{total}</div>
     {#if showTimer}
       <div class="level-progress__timer-inline" aria-label="Remaining seconds">{remainingSeconds.toFixed(1)}s</div>
     {/if}
