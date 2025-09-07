@@ -14,22 +14,21 @@
 
 <footer class="page-footer">
   <a href="https://github.com/sponsors/EasyModeLife" target="_blank" rel="noopener noreferrer" class="footer-btn" title="Donar" aria-label="Ir a la página de donaciones">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <path d="M10 17.5l-1.25-1.125C6.5 13.875 4 12.25 4 9.5 4 7.5 5.5 6 7.5 6c1.04 0 2.04.49 2.75 1.31C11.46 6.49 12.46 6 13.5 6 15.5 6 17 7.5 17 9.5c0 2.75-2.5 4.375-4.75 6.875L10 17.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </a>
 
   <a href="https://github.com/EasyModeLife/MathRaining" target="_blank" rel="noopener noreferrer" class="footer-btn" title="GitHub" aria-label="Ir al repositorio en GitHub">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M9 18c-4.51 2-5-2-7-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <path d="M10 1C5.58 1 2 4.58 2 9c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.14.66.66 1.13 1.72.81 2.14.62.07-.48.28-.81.51-1-1.84-.2-3.76-1.02-3.76-4.47 0-.99.35-1.8.92-2.43-.09-.22-.4-1.1.09-2.29 0 0 .76-.24 2.49.93.72-.2 1.48-.3 2.24-.3.76 0 1.52.1 2.24.3 1.73-1.17 2.49-.93 2.49-.93.49 1.19.18 2.07.09 2.29.57.63.92 1.43.92 2.43 0 3.45-1.92 4.27-3.76 4.47.3.26.56.61.56 1.23 0 .89-.01 1.61-.01 1.83 0 .21.15.46.55.38C15.71 15.53 18 12.54 18 9c0-4.42-3.58-8-8-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </a>
 
   <button class="footer-btn" type="button" on:click={openAbout} title="Acerca de" aria-label="Ir a la página Acerca de">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-      <path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <svg class="icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M10 13v-3M10 7h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
   </button>
 </footer>
@@ -91,9 +90,9 @@
   }
 
   .icon {
-    width: 65%;
-    height: 65%;
-    stroke-width: 1.5;
+    width: 70%;
+    height: 70%;
+    stroke-width: 1.2;
     transition: all 0.3s ease;
     position: relative;
     z-index: 1;
