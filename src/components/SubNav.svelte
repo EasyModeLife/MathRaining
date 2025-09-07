@@ -46,7 +46,7 @@
     background: transparent;
     display: flex;
     align-items: center;
-    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(0.75rem, 2vw, 1rem) 0;
     box-sizing: border-box;
     position: sticky;
     top: 0;

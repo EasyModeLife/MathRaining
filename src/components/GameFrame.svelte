@@ -193,7 +193,7 @@
   .game-main {
     flex: 1;
     overflow: hidden;
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
   .game-app-sections {
@@ -261,7 +261,7 @@
     }
 
     .game-main {
-      padding: 1.5rem;
+      padding: 0.75rem;
     }
 
     .lv-info {
