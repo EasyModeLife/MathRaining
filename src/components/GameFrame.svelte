@@ -214,9 +214,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0;
+    padding: 0.5rem 1rem;
     margin-bottom: 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: none;
     background: var(--bg-secondary);
   }
 
@@ -251,7 +251,7 @@
     }
 
     .lv-info {
-      padding: 0;
+      padding: 0.5rem 1rem;
     }
   }
 
@@ -265,7 +265,7 @@
     }
 
     .lv-info {
-      padding: 0;
+      padding: 0.5rem 1rem;
     }
   }
 
