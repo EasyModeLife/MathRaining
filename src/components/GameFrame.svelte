@@ -105,20 +105,21 @@
 
 <div class="trainer-layout">
   <div class="app-frame">
-    <header class="app-header">
-      <div class="header-left">
-        <slot name="header-left"></slot>
-      </div>
-      <LevelProgress
-        {levelId}
-        {total}
-        {correct}
-        {showTimer}
-        remainingSeconds={remainingSeconds}
-      />
-    </header>
     <main class="app-main">
-      <div class="trainer-grid grid-modular">
+      <div class="game-app-sections">
+        <!-- Level Info -->
+        <div class="lv-info">
+          <div class="header-left">
+            <slot name="header-left"></slot>
+          </div>
+          <LevelProgress
+            {levelId}
+            {total}
+            {correct}
+            {showTimer}
+            remainingSeconds={remainingSeconds}
+          />
+        </div>
         <!-- Caja de problema -->
         <slot name="problem">
           <GameBox area="problem">
@@ -187,22 +188,6 @@
     color: var(--text);
   }
 
-  .app-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-secondary);
-  }
-
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: clamp(0.75rem, 2vw, 1rem);
-  }
-
   /* title removed: styles kept for reference */
 
   .app-main {
@@ -211,15 +196,27 @@
     padding: 1rem;
   }
 
-  .trainer-grid {
-    height: 100%;
-    display: grid;
+  .game-app-sections {
+    display: block;
     gap: 1rem;
   }
 
-  .grid-modular {
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 1fr;
+  .game-app-sections > * {
+    margin-bottom: 1rem;
+  }
+
+  .game-app-sections > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .lv-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
   }
 
   .footer-stats {
@@ -247,59 +244,27 @@
     border-color: var(--border);
   }
 
-  :global([data-area="problem"]) {
-    grid-column: 1 / -1;
-  }
-
-  :global([data-area="image"]) {
-    grid-column: 1 / -1;
-  }
-
-  :global([data-area="answer"]) {
-    grid-column: 1 / -1;
-  }
-
-  :global([data-area="footer"]) {
-    grid-column: 1 / -1;
-  }
-
   @media (min-width: 768px) {
-    .grid-modular {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto 1fr auto;
+    .game-app-sections {
+      gap: 1.5rem;
     }
 
-    :global([data-area="problem"]) {
-      grid-column: 1 / -1;
-    }
-
-    :global([data-area="image"]) {
-      grid-column: 1 / 3;
-      grid-row: 2;
-    }
-
-    :global([data-area="answer"]) {
-      grid-column: 1 / -1;
-      grid-row: 3;
-    }
-
-    :global([data-area="footer"]) {
-      grid-column: 1 / -1;
-      grid-row: 4;
+    .lv-info {
+      padding: 1.5rem 2rem;
     }
   }
 
   @media (min-width: 1024px) {
-    .grid-modular {
+    .game-app-sections {
       gap: 1.5rem;
-    }
-
-    .app-header {
-      padding: 1.5rem 2rem;
     }
 
     .app-main {
       padding: 1.5rem;
+    }
+
+    .lv-info {
+      padding: 1.5rem 2rem;
     }
   }
 
