@@ -104,8 +104,8 @@
 </script>
 
 <div class="trainer-layout">
-  <div class="app-frame">
-    <main class="app-main">
+  <div class="game-frame">
+    <main class="game-main">
       <div class="game-app-sections">
         <!-- Level Info -->
         <div class="lv-info">
@@ -180,7 +180,7 @@
     flex-direction: column;
   }
 
-  .app-frame {
+  .game-frame {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -190,7 +190,7 @@
 
   /* title removed: styles kept for reference */
 
-  .app-main {
+  .game-main {
     flex: 1;
     overflow: hidden;
     padding: 1rem;
@@ -259,7 +259,7 @@
       gap: 1.5rem;
     }
 
-    .app-main {
+    .game-main {
       padding: 1.5rem;
     }
 

@@ -54,7 +54,7 @@
     z-index: 1;
   }
   .game-host :global(.trainer-layout) { height: 100%; }
-  .game-host :global(.app-frame) { height: 100%; }
+  .game-host :global(.game-frame) { height: 100%; }
 
   /* Sección de juego con submenú centrado y responsivo */
   .game-section {

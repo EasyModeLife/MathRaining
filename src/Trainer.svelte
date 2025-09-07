@@ -160,8 +160,8 @@
 </script>
 
 <div class="trainer-layout">
-  <div class="app-frame">
-    <header class="app-header">
+  <div class="game-frame">
+    <header class="game-header">
       <button
         class="kbd-menu-btn"
         aria-label="Keyboard shortcuts"
@@ -206,7 +206,7 @@
         remainingSeconds={remainingMs/1000}
       />
     </header>
-    <main class="app-main">
+    <main class="game-main">
       <div class="trainer-grid">
         <ProblemDisplay
           question={current.question}

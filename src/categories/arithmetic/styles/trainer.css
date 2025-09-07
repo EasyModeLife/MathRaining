@@ -31,7 +31,7 @@
   font-size: var(--font-scale-base);
 }
 
-.app-frame {
+.game-frame {
   width: 100%;
   max-width: 500px; /* Max-width for mobile, will be overridden for larger screens */
   height: 100%;
@@ -40,7 +40,7 @@
   gap: 1rem;
 }
 
-.app-header {
+.game-header {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,7 +78,7 @@
 .key{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:.8rem; background:#11161d; border:1px solid #2c313a; border-radius:6px; padding:.15rem .35rem; }
 .desc{ font-size:.8rem; opacity:.8; margin-left:.6rem; }
 
-.app-main {
+.game-main {
   flex-grow: 1;
   overflow: hidden;
   display: flex;
@@ -152,7 +152,7 @@
     padding: 0.75rem;
   }
 
-  .app-frame {
+  .game-frame {
     max-width: 100%;
   }
 
@@ -199,7 +199,7 @@
 
 /* Tablet and Desktop styles */
 @media (min-width: 768px) {
-  .app-frame {
+  .game-frame {
     max-width: 700px; /* Increase max-width for tablets/desktops */
   }
 
@@ -220,7 +220,7 @@
 }
 
 @media (min-width: 1024px) {
-  .app-frame {
+  .game-frame {
     max-width: 800px;
   }
 

@@ -19,8 +19,8 @@
 </script>
 
 <div class="trainer-layout">
-  <div class="app-frame">
-    <header class="app-header">
+  <div class="game-frame">
+    <header class="game-header">
       <slot name="headerExtras"></slot>
       <h1 class="main-title">{title}</h1>
       <LevelProgress
@@ -31,7 +31,7 @@
         remainingSeconds={remainingSeconds}
       />
     </header>
-    <main class="app-main">
+    <main class="game-main">
       <div class="trainer-grid">
         <ProblemDisplay
           question={question}
