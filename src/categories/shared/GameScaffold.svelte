@@ -49,6 +49,6 @@
   </div>
 
 <!--
-  Nota: Los estilos provienen de games/arithmetic/styles/trainer.css
+  Nota: Los estilos provienen de categories/arithmetic/styles/trainer.css
   y se importan en cada Trainer. Este scaffold solo estructura.
 -->
