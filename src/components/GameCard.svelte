@@ -58,25 +58,11 @@
   .game-card:focus {
     transform: translateY(-2px);
     box-shadow: 0 14px 60px -20px rgba(0,0,0,.55);
-    border-color: rgba(255,255,255,.3);
+    border-color: var(--accent-cool);
   }
 
   .game-card:active {
     transform: translateY(0);
-  }
-
-  .game-card__media {
-    display: grid;
-    place-items: center;
-    font-weight: 800;
-    font-size: clamp(2rem, 6vw, 4.5rem);
-    opacity: 0.25;
-    letter-spacing: 0.3rem;
-    min-height: clamp(84px, 18vh, 180px);
-    background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
   }
 
   .game-card__media::before {
