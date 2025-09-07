@@ -1,4 +1,7 @@
 <div class="about-page">
+  <div class="logo-container">
+    <img src="/newlogo.png" alt="MathRaining Logo" class="about-logo" />
+  </div>
   <h2>About MathRaining</h2>
   <p>
     This Math Trainer was created with a simple philosophy: provide a clean, fast, and effective learning tool without any of the usual annoyances of the modern web.
@@ -55,5 +58,15 @@
   }
   li {
     margin-bottom: 0.5rem;
+  }
+
+  .logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .about-logo {
+    max-width: 150px;
+    height: auto;
   }
 </style>
