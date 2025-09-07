@@ -239,11 +239,12 @@
     color: var(--text);
     text-align: center;
     transition: border-color 0.2s;
+    user-select: none;
   }
 
   .answer-input:focus {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--border);
   }
 
   :global([data-area="problem"]) {
