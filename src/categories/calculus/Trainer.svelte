@@ -128,6 +128,13 @@
   handleInput={handleChange}
   handleInputKey={handleInputKey}
 >
+  <span slot="footer-left">
+    {#if !firstProblemOfLevel}
+      <MathRenderer expr={`\\text{Time left: } ${(remainingMs/1000).toFixed(1)}\\text{s}`}/>
+    {:else}
+      <MathRenderer expr={`\\text{Get ready...}`}/>
+    {/if}
+  </span>
   <span slot="footer-right">Topics: {level.topics.length}</span>
 </GameFrame>
 {/key}

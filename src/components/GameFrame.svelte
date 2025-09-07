@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import LevelProgress from './LevelProgress.svelte';
-  import ProblemDisplay from '../games/arithmetic/components/ProblemDisplay.svelte';
-  import '../games/arithmetic/styles/trainer.css';
+  import ProblemDisplay from '../categories/arithmetic/components/ProblemDisplay.svelte';
+  import '../categories/arithmetic/styles/trainer.css';
   import GameBox from './GameBox.svelte';
   // Render condicional de slots
   // @ts-ignore - $$slots es inyectado por Svelte

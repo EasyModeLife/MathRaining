@@ -20,11 +20,11 @@
 
   // Load appropriate trainer component
   $: if (gameType === 'arithmetic' && !TrainerComp) {
-    import('../games/arithmetic/Trainer.svelte').then(module => {
+    import('../categories/arithmetic/Trainer.svelte').then(module => {
       TrainerComp = module.default;
     }).catch(err => console.error('Failed to load arithmetic trainer:', err));
   } else if (gameType === 'calculus' && !TrainerComp) {
-    import('../games/calculus/Trainer.svelte').then(module => {
+    import('../categories/calculus/Trainer.svelte').then(module => {
       TrainerComp = module.default;
     }).catch(err => console.error('Failed to load calculus trainer:', err));
   }
