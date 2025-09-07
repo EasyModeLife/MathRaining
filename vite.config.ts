@@ -7,6 +7,8 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 export default defineConfig({
   plugins: [svelte()],
   build: {
+    // Output directory
+    outDir: 'mathraining_app',
     // Better chunking for optimal caching
     rollupOptions: {
       output: {

@@ -1,0 +1,29 @@
+/* Dark Color Scheme Theme */
+/* Applied when user prefers dark color scheme */
+
+@media (prefers-color-scheme: dark) {
+  /* SubNav links */
+  .subnav-link {
+    background: transparent;
+    border-color: rgba(255,255,255,.1);
+  }
+
+  .subnav-link:hover {
+    background: rgba(255,255,255,.05);
+  }
+
+  /* Main content adjustments */
+  .main-content {
+    background: rgba(0,0,0,0.1);
+  }
+
+  /* Game cards */
+  .game-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+  }
+
+  .game-card:hover {
+    background: rgba(255,255,255,0.08);
+  }
+}

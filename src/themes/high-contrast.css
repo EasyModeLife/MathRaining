@@ -1,0 +1,19 @@
+/* High Contrast Theme */
+/* Applied when user prefers high contrast */
+
+@media (prefers-contrast: high) {
+  /* Footer buttons */
+  .footer-btn {
+    border: 1px solid var(--text, #e6edf3);
+  }
+
+  .footer-btn:hover,
+  .footer-btn:focus {
+    border-color: var(--accent-cool, #2f52e0);
+    color: var(--accent-cool, #2f52e0);
+  }
+
+  .footer-btn .icon {
+    stroke: var(--bg, #0d1117);
+  }
+}

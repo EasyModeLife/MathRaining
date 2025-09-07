@@ -1,0 +1,7 @@
+/* Theme Index */
+/* Import all theme files */
+
+@import './high-contrast.css';
+@import './reduced-motion.css';
+@import './dark-scheme.css';
+@import './custom-themes.css';

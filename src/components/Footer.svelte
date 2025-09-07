@@ -64,38 +64,22 @@
   .footer-btn {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     width: clamp(40px, 10.8vw, 50px);
     height: clamp(40px, 10.8vw, 50px);
-    border-radius: 100%;
+    border-radius: 50%;
     background: transparent;
-    border: none !important;
-    padding: 0 !important;
+    border: none;
     color: var(--text, #e6edf3);
     cursor: pointer;
     text-decoration: none;
-    backdrop-filter: blur(8px);
-    box-sizing: border-box;
-    position: relative;
-    overflow: hidden;
-  }
-
-
-  .footer-btn:hover::before,
-  .footer-btn:focus::before {
-    opacity: 1;
   }
 
   .icon {
     width: 70%;
     height: 70%;
     stroke-width: 1.2;
-    position: relative;
-    z-index: 1;
-    flex-shrink: 0;
   }
-
-
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
@@ -140,34 +124,20 @@
     }
   }
 
-  /* Accessibility improvements */
-  @media (prefers-reduced-motion: reduce) {
-    .footer-btn,
-    .icon,
-    .footer-btn::before {
-      transition: none;
-    }
-  }
-
   /* High contrast mode */
   @media (prefers-contrast: high) {
     .footer-btn {
-      background: linear-gradient(135deg, var(--text, #e6edf3) 0%, rgba(255,255,255,0.9) 100%) !important;
-      color: var(--bg, #0d1117) !important;
-    }
-
-    .footer-btn::before {
-      content: none !important;
+      border: 1px solid var(--text, #e6edf3);
     }
 
     .icon {
-      stroke: var(--bg, #0d1117) !important;
+      stroke: var(--bg, #0d1117);
     }
 
     .footer-btn:hover,
     .footer-btn:focus {
-      background: var(--accent-cool, #2f52e0) !important;
-      color: #fff !important;
+      border-color: var(--accent-cool, #2f52e0);
+      color: var(--accent-cool, #2f52e0);
     }
   }
 </style>

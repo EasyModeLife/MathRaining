@@ -1,0 +1,32 @@
+/* Reduced Motion Theme */
+/* Applied when user prefers reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  /* General reduced motion styles */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* App specific reduced motion */
+  .page-transition {
+    transition: none !important;
+  }
+
+  /* Button animations */
+  button,
+  .btn,
+  .action,
+  .footer-btn {
+    transition: none !important;
+  }
+
+  /* Icon animations */
+  .icon {
+    transition: none !important;
+  }
+}

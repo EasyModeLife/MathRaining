@@ -1,0 +1,46 @@
+/* Custom Themes */
+/* Theme-specific styles for deep-blue, solarized-light, dark, pink-purple */
+
+/* Deep Blue Theme */
+[data-theme="deep-blue"] {
+  --bg: #0d1117;
+  --text: #e6edf3;
+  --border: rgba(255,255,255,0.1);
+  --surface: rgba(255,255,255,0.05);
+  --surface-alt: rgba(255,255,255,0.08);
+  --accent-cool: #2f52e0;
+  --accent-warm: #ff6b35;
+}
+
+/* Solarized Light Theme */
+[data-theme="solarized-light"] {
+  --bg: #fdf6e3;
+  --text: #586e75;
+  --border: rgba(0,0,0,0.1);
+  --surface: rgba(0,0,0,0.05);
+  --surface-alt: rgba(0,0,0,0.08);
+  --accent-cool: #268bd2;
+  --accent-warm: #dc322f;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --text: #f0f0f0;
+  --border: rgba(255,255,255,0.15);
+  --surface: rgba(255,255,255,0.08);
+  --surface-alt: rgba(255,255,255,0.12);
+  --accent-cool: #4a9eff;
+  --accent-warm: #ff6b6b;
+}
+
+/* Pink Purple Theme */
+[data-theme="pink-purple"] {
+  --bg: #1a0a1e;
+  --text: #fce4ff;
+  --border: rgba(255,255,255,0.2);
+  --surface: rgba(255,255,255,0.08);
+  --surface-alt: rgba(255,255,255,0.12);
+  --accent-cool: #ff6bd6;
+  --accent-warm: #ff9ff3;
+}

@@ -1,3 +1,6 @@
+/* Import modular themes */
+@import './themes/index.css';
+
 :root {
   /* Global fixed palette tokens (not themed) */
   --bittersweet: #FF715B; /* miss */
@@ -9,59 +12,28 @@
   --accent-hot: var(--bittersweet);
   --accent-cool: var(--byz-blue);
   --accent-positive: var(--lime);
+
+  /* Layout variables */
+  --header-pct: 8%;
+  --footer: 5%;
 }
 
-/* Theme: Deep Blue (default) */
-:root[data-theme="deep-blue"],
-:root:not([data-theme]) {
-  --bg: #022B3A;
-  --surface: #1f7a8c;
-  --surface-alt: #01212e;
-  --border: #1f7a8c;
-  --text: #e1e5f2;
-  --bar-bg: var(--surface-alt);
-  --input-bg: var(--surface);
-  --input-border: #bfdbf7;
-  --focus: #bfdbf7;
+/* Base styles and utilities */
+* {
+  box-sizing: border-box;
 }
 
-/* Theme: White Solarized (light-ish) */
-:root[data-theme="solarized-light"] {
-  --bg: #fdf6e3; /* solarized base3 */
-  --surface: #eee8d5; /* base2 */
-  --surface-alt: #e7dec6;
-  --border: #93a1a1; /* base1 */
-  --text: #073642; /* base02 */
-  --bar-bg: #eae2cc;
-  --input-bg: #f5efdc;
-  --input-border: #93a1a1;
-  --focus: #268bd2; /* blue */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Theme: Dark */
-:root[data-theme="dark"] {
-  --bg: #0b0e11;
-  --surface: #151a21;
-  --surface-alt: #0f1318;
-  --border: #2a3340;
-  --text: #e6edf3;
-  --bar-bg: #0f1318;
-  --input-bg: #151a21;
-  --input-border: #2a3340;
-  --focus: #4da3ff;
-}
-
-/* Theme: Pink Purple */
-:root[data-theme="pink-purple"] {
-  --bg: #1a0a1e; /* dark purple background */
-  --surface: #3d1c51; /* medium purple surface */
-  --surface-alt: #2a1038; /* darker purple surface */
-  --border: #5d2a7d; /* light purple border */
-  --text: #fce4ff; /* light pink text */
-  --bar-bg: #2a1038; /* dark purple bar */
-  --input-bg: #3d1c51; /* purple input background */
-  --input-border: #8b4da6; /* medium light purple border */
-  --focus: #ff6bd6; /* bright pink focus */
+button {
+  font-family: inherit;
 }
 
 body { margin:0; font-family: system-ui, Arial, sans-serif; background: var(--bg); color: var(--text); }
