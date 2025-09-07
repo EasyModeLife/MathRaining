@@ -1,6 +1,6 @@
 <script lang="ts">
   import MathRenderer from '../../../components/Math.svelte';
-  import { useTextFitting } from '../../../logic/game/useTextFitting';
+  import { useProblemRenderer, type RenderingResult } from '../../../logic/game/useTextFitting';
 
   // Component props
   export let question = '';
@@ -14,12 +14,11 @@
   let containerEl: HTMLDivElement;
   let fitboxEl: HTMLDivElement;
 
-  // Use the modular text fitting hook
-  const { fontPx, renderExpr } = useTextFitting(
-    question,
-    containerEl,
-    fitboxEl
-  );
+  // Use the new modular rendering engine
+  let renderResult: RenderingResult;
+
+  // Reactive rendering
+  $: renderResult = useProblemRenderer(question, containerEl, fitboxEl);
 </script>
 
   <div class="problem-wrapper">
@@ -35,8 +34,8 @@
     bind:this={containerEl}
     aria-live="polite" role="heading" aria-level="1"
   >
-  <div class="fitbox" bind:this={fitboxEl} style={`--fsize:${fontPx}px`}>
-      <MathRenderer expr={renderExpr || question} display={true} />
+  <div class="fitbox" bind:this={fitboxEl} style={`--fsize:${renderResult?.fontSize || 64}px`}>
+      <MathRenderer expr={renderResult?.finalContent || question} display={true} />
     </div>
   </div>
   
@@ -44,12 +43,12 @@
 
 <style>
   .problem-wrapper { position:relative; height:clamp(28vh, 36vh, 46vh); display:flex; align-items:center; justify-content:center; }
-  .problem-display { 
+  .problem-display {
     font-weight:700;
     /* Tamaño base fluido, luego se ajusta con escala */
     font-size: clamp(4rem, 10vw, 8rem);
     font-size: clamp(4rem, 7cqi, 8rem);
-    padding:1rem 1.2rem;
+    padding:0.5rem 0.75rem; /* Reducido significativamente para maximizar espacio */
     border-radius:28px;
     display:flex; align-items:center; justify-content:center;
     min-height:100%; width:100%;
@@ -58,16 +57,32 @@
     text-shadow:0 4px 18px rgba(0,0,0,.55);
   overflow: hidden;
     box-sizing: border-box;
+    position: relative;
   }
-  .fitbox { 
+  .problem-display::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius:28px;
+    background-color: rgba(255,255,255,0.02);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .problem-display.overflowing::after {
+    opacity: 0.1;
+  }
+  .fitbox {
     display:inline-block;
     font-size: var(--fsize, 64px);
     max-width: 100%;
     line-height: 1.12;
-    padding-inline: .25em; /* amortiguador para brackets grandes */
+    padding-inline: 0.125em; /* Reducido significativamente para maximizar espacio */
     max-height: 100%;
     overflow: hidden; /* evitamos scroll visible, forzamos ajuste */
     white-space: normal; /* permite envoltura en KaTeX si hay espacios */
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   
   .judgement { position:absolute; top:.55rem; left:.8rem; font-size:clamp(1.4rem,4.4vw,3.2rem); font-weight:800; letter-spacing:3px; color:var(--judge-color, var(--text)); opacity:.18; pointer-events:none; text-shadow:0 2px 12px rgba(0,0,0,.55); animation:judgeburst .95s ease-out forwards; mix-blend-mode:screen; }
@@ -75,6 +90,10 @@
   @keyframes judgeburst { 0% { transform:translateY(6px) scale(.6); opacity:.05; } 18% { transform:translateY(0) scale(1); opacity:.32; } 60% { opacity:.22; } 100% { transform:translateY(-10px) scale(.9); opacity:0; } }
   @keyframes hue { 0% { background-position:0% 50%; } 100% { background-position:100% 50%; } }
   /* Font sizing is now handled by the fit() system, no hardcoded media queries needed */
-  @media (max-width:600px){ .problem-wrapper { height:clamp(24vh, 32vh, 38vh); } }
+  @media (max-width:600px){
+    .problem-wrapper { height:clamp(24vh, 32vh, 38vh); }
+    .problem-display { padding:0.25rem 0.375rem; } /* Padding mínimo en móviles */
+    .fitbox { padding-inline: 0.06em; } /* Amortiguador mínimo */
+  }
   @media (max-height:640px){ .problem-wrapper { height:clamp(24vh, 30vh, 36vh); } }
 </style>

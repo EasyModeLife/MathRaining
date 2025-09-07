@@ -14,3 +14,14 @@ pages_build_output_dir = "mathraining_app"
 # Functions configuration
 [build.upload.rules]
 "functions/[[path]].js" = "/"
+"functions/latex-render.js" = "/latex-render"
+
+# Performance optimizations
+[vars]
+KATEX_FONT_SIZE = "1.2"
+KATEX_DISPLAY_MODE = "true"
+
+# Enable compression for major performance boost
+[miniflare]
+compression = true
+enable_http_cache = true

@@ -16,6 +16,7 @@
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/svelte": "^5.2.8",
     "@testing-library/user-event": "^14.6.1",
+    "@types/katex": "^0.16.7",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitest/ui": "^1.6.1",
