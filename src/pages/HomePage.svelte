@@ -15,7 +15,7 @@
   <GameCard
     title="Arithmetic"
     description="Practice addition, subtraction, multiplication and division with time limits and increasing levels."
-    mathExpr={'\\large \\times \\quad \\div \\quad + \\quad -'}
+    textContent="× ÷ + −"
     onClick={openArithmetic}
     ariaLabel="Enter Arithmetic"
   />
@@ -23,7 +23,7 @@
   <GameCard
     title="Calculus"
     description="Basic derivatives, integration rules and trigonometric functions with text verification."
-    mathExpr={'\\large \\int \\quad \\frac{d}{dx}'}
+    textContent="∫ d/dx"
     onClick={openCalculus}
     ariaLabel="Enter Calculus"
   />
