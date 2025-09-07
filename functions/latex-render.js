@@ -46,6 +46,7 @@ export async function onRequest(context) {
       errorColor: '#ff6b6b',
       strict: 'ignore',
       trust: false,
+      output: 'mathml',
       macros: {
         // Common mathematical macros
         "\\RR": "\\mathbb{R}",

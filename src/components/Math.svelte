@@ -76,7 +76,8 @@
       katex.render(expr, el, {
         displayMode: display,
         throwOnError: false,
-        errorColor: '#ff6b6b'
+        errorColor: '#ff6b6b',
+        output: 'mathml'
       });
 
       currentExpr = expr;
