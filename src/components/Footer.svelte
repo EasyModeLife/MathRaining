@@ -69,7 +69,8 @@
     height: clamp(40px, 10.8vw, 50px);
     border-radius: 100%;
     background: transparent;
-    border: 1px solid rgba(255,255,255,.12);
+    border: none;
+    padding: 0;
     color: var(--text, #e6edf3);
     cursor: pointer;
     text-decoration: none;
@@ -91,11 +92,6 @@
   .footer-btn:hover::before,
   .footer-btn:focus::before {
     opacity: 1;
-  }
-
-  .footer-btn:hover,
-  .footer-btn:focus {
-    border-color: rgba(255,255,255,.4);
   }
 
   .icon {
@@ -167,8 +163,7 @@
   /* High contrast mode */
   @media (prefers-contrast: high) {
     .footer-btn {
-      border-width: 2px;
-      background: var(--text, #e6edf3);
+      background: linear-gradient(135deg, var(--text, #e6edf3) 0%, rgba(255,255,255,0.9) 100%);
       color: var(--bg, #0d1117);
     }
 
@@ -179,7 +174,7 @@
     .footer-btn:hover,
     .footer-btn:focus {
       background: var(--accent-cool, #2f52e0);
-      border-color: var(--accent-cool, #2f52e0);
+      color: #fff;
     }
   }
 </style>
